@@ -1,0 +1,46 @@
+Package ToyLanguage;
+
+Helpers
+ other = ' ' | 13 | 10;
+ whole = ['1' .. '9'];
+ natural = ['0' + whole];
+ letter = [['a' .. 'z'] + ['A' .. 'Z']];
+
+Tokens
+ assign = ':=';
+ plus = '+';
+ mult = '*';
+ blank = other+;
+ eol = ';';
+ 
+ lparen = '(';
+ rparen = ')';
+ comma = ',';
+
+ id = letter (letter)*;
+ comment = '//' ([[0 .. 0xffff] - [10 + 13]])*;
+ integer = '0' | whole (natural)*;
+ string = '"' letter+ '"';
+
+Ignored Tokens
+ blank, comment;
+
+Productions
+ prog = stmts;
+ 
+ stmts = {multiple} stmts stmt | {single} stmt;
+ stmt = {assign} assignstmt | {decl} declarestmt | {fc} functioncall;
+ assignstmt = id assign expr eol;
+ declarestmt = [typename]:id [varname]:id eol;
+ functioncall = id lparen arguments rparen eol;
+ 
+ arguments = {multiple} argument comma arguments | {none} ;
+ argument = expr;
+
+ expr = {plus} expr plus expr2 | {pass} expr2;
+ expr2 = {mult} expr2 mult operand | {pass} operand;
+ operand = {int} integer | {variable} id | {string} string;
+ 
+ 
+ 
+

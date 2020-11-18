@@ -1,0 +1,32 @@
+main {
+	int x
+	fpoint bar
+	final fpoint b = 5.44
+	final string testing = "hello world"
+	
+	put_string("main subprocedure")
+	new_line
+	put_string(testing)
+	new_line
+	
+	x = 100
+
+	while ( x > 90) {
+		x = x - 1
+	}
+
+	if (x == 90) {
+		put_int(x)
+		put_float(b)
+
+	} else {
+		x = 10
+	}
+
+	x = 10 * 4 / 2
+	put_string("x should be 20: ")
+	put_int(x)
+	new_line
+	bar = 567.12
+	put_float(b)
+}
