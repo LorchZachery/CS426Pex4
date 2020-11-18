@@ -105,6 +105,18 @@ namespace CS426.analysis
             _output.WriteLine("\tstloc " + node.GetId().Text);
         }
 
+        //x equals -3 end
+        public override void OutANegationUnaryExpr(ANegationUnaryExpr node)
+        {
+            _output.WriteLine("\tneg");
+        }
+
+        // x equals not 1 end THIS IS NOT A PROPER WAY IN OUR LANGUAGE TO USE NOT
+        public override void OutANotUnaryExpr(ANotUnaryExpr node)
+        {
+            _output.WriteLine("\tnot");
+        }
+
         //adding literal for string param
         public override void OutAStringArgs(AStringArgs node)
         {

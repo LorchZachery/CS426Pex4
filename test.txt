@@ -7,25 +7,40 @@ main() {
 	float y end
 	y equals x end
 	
-	int addtion end
-	addtion equals 3 plus z end
-	PrintInt(addtion) end
-	NewLine() end
+	int w end
+	w equals not 1 end
+	PrintInt(w) end
 	
-	int subtraction end
-	subtraction equals 4 minus z end
-	PrintInt(subtraction) end
-	NewLine() end
 	
-	int multiplicaiton end
-	multiplicaiton equals 4 times z end
-	PrintInt(multiplicaiton) end
-	NewLine() end
 	
-	int dividsion end
-	dividsion equals 9 divide z end 
-	PrintInt(dividsion) end
-	NewLine() end
+	COMMENT: z equals -3 end
+	COMMENT: PrintInt(z) end
+	COMMENT: NewLine() end
+	COMMENT: 
+	COMMENT: int negAdd end
+	COMMENT: negAdd equals z plus 3 end
+	COMMENT: PrintInt(negAdd) end
+	
+	
+	COMMENT: int addtion end
+	COMMENT: addtion equals 3 plus z end
+	COMMENT: PrintInt(addtion) end
+	COMMENT: NewLine() end
+	COMMENT: 
+	COMMENT: int subtraction end
+	COMMENT: subtraction equals 4 minus z end
+	COMMENT: PrintInt(subtraction) end
+	COMMENT: NewLine() end
+	COMMENT: 
+	COMMENT: int multiplicaiton end
+	COMMENT: multiplicaiton equals 4 times z end
+	COMMENT: PrintInt(multiplicaiton) end
+	COMMENT: NewLine() end
+	COMMENT: 
+	COMMENT: int dividsion end
+	COMMENT: dividsion equals 9 divide z end 
+	COMMENT: PrintInt(dividsion) end
+	COMMENT: NewLine() end
 	
 	COMMENT: string tee end
 	COMMENT: tee equals Quote: fartehr` end
