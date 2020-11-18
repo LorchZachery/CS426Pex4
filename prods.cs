@@ -4,47 +4,103 @@ using System;
 using System.Collections;
 using System.Text;
 
-using  ToyLanguage.analysis;
+using  CS426.analysis;
 
-namespace ToyLanguage.node {
+namespace CS426.node {
 
-public abstract class PProg : Node
+public abstract class PProgram : Node
 {
 }
 
-public abstract class PStmts : Node
+public abstract class PConstants : Node
 {
 }
 
-public abstract class PStmt : Node
+public abstract class PSingleConstant : Node
 {
 }
 
-public abstract class PAssignstmt : Node
+public abstract class PFunctions : Node
 {
 }
 
-public abstract class PDeclarestmt : Node
+public abstract class PSingleFunction : Node
 {
 }
 
-public abstract class PFunctioncall : Node
+public abstract class PParams : Node
 {
 }
 
-public abstract class PArguments : Node
+public abstract class PMainFunction : Node
 {
 }
 
-public abstract class PArgument : Node
+public abstract class PStatements : Node
 {
 }
 
-public abstract class PExpr : Node
+public abstract class PLoc : Node
 {
 }
 
-public abstract class PExpr2 : Node
+public abstract class PDeclarationCode : Node
+{
+}
+
+public abstract class PAssignmentCode : Node
+{
+}
+
+public abstract class PFunctionCall : Node
+{
+}
+
+public abstract class PConditionalCode : Node
+{
+}
+
+public abstract class PIfStatement : Node
+{
+}
+
+public abstract class PElseStatement : Node
+{
+}
+
+public abstract class PWhileStatment : Node
+{
+}
+
+public abstract class PArgs : Node
+{
+}
+
+public abstract class POrExpr : Node
+{
+}
+
+public abstract class PAndExpr : Node
+{
+}
+
+public abstract class PCompareExpr : Node
+{
+}
+
+public abstract class PAddSub : Node
+{
+}
+
+public abstract class PMultDiv : Node
+{
+}
+
+public abstract class PUnaryExpr : Node
+{
+}
+
+public abstract class PParenthetical : Node
 {
 }
 
@@ -53,43 +109,51 @@ public abstract class POperand : Node
 }
 
 
-public sealed class AProg : PProg
+public sealed class AProgram : PProgram
 {
-    private PStmts _stmts_;
+    private PConstants _constants_;
+    private PFunctions _functions_;
+    private PMainFunction _main_function_;
 
-    public AProg ()
+    public AProgram ()
     {
     }
 
-    public AProg (
-            PStmts _stmts_
+    public AProgram (
+            PConstants _constants_,
+            PFunctions _functions_,
+            PMainFunction _main_function_
     )
     {
-        SetStmts (_stmts_);
+        SetConstants (_constants_);
+        SetFunctions (_functions_);
+        SetMainFunction (_main_function_);
     }
 
     public override Object Clone()
     {
-        return new AProg (
-            (PStmts)CloneNode (_stmts_)
+        return new AProgram (
+            (PConstants)CloneNode (_constants_),
+            (PFunctions)CloneNode (_functions_),
+            (PMainFunction)CloneNode (_main_function_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAProg(this);
+        ((Analysis) sw).CaseAProgram(this);
     }
 
-    public PStmts GetStmts ()
+    public PConstants GetConstants ()
     {
-        return _stmts_;
+        return _constants_;
     }
 
-    public void SetStmts (PStmts node)
+    public void SetConstants (PConstants node)
     {
-        if(_stmts_ != null)
+        if(_constants_ != null)
         {
-            _stmts_.Parent(null);
+            _constants_.Parent(null);
         }
 
         if(node != null)
@@ -102,76 +166,146 @@ public sealed class AProg : PProg
             node.Parent(this);
         }
 
-        _stmts_ = node;
+        _constants_ = node;
+    }
+    public PFunctions GetFunctions ()
+    {
+        return _functions_;
+    }
+
+    public void SetFunctions (PFunctions node)
+    {
+        if(_functions_ != null)
+        {
+            _functions_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _functions_ = node;
+    }
+    public PMainFunction GetMainFunction ()
+    {
+        return _main_function_;
+    }
+
+    public void SetMainFunction (PMainFunction node)
+    {
+        if(_main_function_ != null)
+        {
+            _main_function_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _main_function_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_stmts_)
+            + ToString (_constants_)
+            + ToString (_functions_)
+            + ToString (_main_function_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _stmts_ == child )
+        if ( _constants_ == child )
         {
-            _stmts_ = null;
+            _constants_ = null;
+            return;
+        }
+        if ( _functions_ == child )
+        {
+            _functions_ = null;
+            return;
+        }
+        if ( _main_function_ == child )
+        {
+            _main_function_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _stmts_ == oldChild )
+        if ( _constants_ == oldChild )
         {
-            SetStmts ((PStmts) newChild);
+            SetConstants ((PConstants) newChild);
+            return;
+        }
+        if ( _functions_ == oldChild )
+        {
+            SetFunctions ((PFunctions) newChild);
+            return;
+        }
+        if ( _main_function_ == oldChild )
+        {
+            SetMainFunction ((PMainFunction) newChild);
             return;
         }
     }
 
 }
-public sealed class AMultipleStmts : PStmts
+public sealed class AMultConstants : PConstants
 {
-    private PStmts _stmts_;
-    private PStmt _stmt_;
+    private PSingleConstant _single_constant_;
+    private PConstants _constants_;
 
-    public AMultipleStmts ()
+    public AMultConstants ()
     {
     }
 
-    public AMultipleStmts (
-            PStmts _stmts_,
-            PStmt _stmt_
+    public AMultConstants (
+            PSingleConstant _single_constant_,
+            PConstants _constants_
     )
     {
-        SetStmts (_stmts_);
-        SetStmt (_stmt_);
+        SetSingleConstant (_single_constant_);
+        SetConstants (_constants_);
     }
 
     public override Object Clone()
     {
-        return new AMultipleStmts (
-            (PStmts)CloneNode (_stmts_),
-            (PStmt)CloneNode (_stmt_)
+        return new AMultConstants (
+            (PSingleConstant)CloneNode (_single_constant_),
+            (PConstants)CloneNode (_constants_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAMultipleStmts(this);
+        ((Analysis) sw).CaseAMultConstants(this);
     }
 
-    public PStmts GetStmts ()
+    public PSingleConstant GetSingleConstant ()
     {
-        return _stmts_;
+        return _single_constant_;
     }
 
-    public void SetStmts (PStmts node)
+    public void SetSingleConstant (PSingleConstant node)
     {
-        if(_stmts_ != null)
+        if(_single_constant_ != null)
         {
-            _stmts_.Parent(null);
+            _single_constant_.Parent(null);
         }
 
         if(node != null)
@@ -184,18 +318,18 @@ public sealed class AMultipleStmts : PStmts
             node.Parent(this);
         }
 
-        _stmts_ = node;
+        _single_constant_ = node;
     }
-    public PStmt GetStmt ()
+    public PConstants GetConstants ()
     {
-        return _stmt_;
+        return _constants_;
     }
 
-    public void SetStmt (PStmt node)
+    public void SetConstants (PConstants node)
     {
-        if(_stmt_ != null)
+        if(_constants_ != null)
         {
-            _stmt_.Parent(null);
+            _constants_.Parent(null);
         }
 
         if(node != null)
@@ -208,83 +342,83 @@ public sealed class AMultipleStmts : PStmts
             node.Parent(this);
         }
 
-        _stmt_ = node;
+        _constants_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_stmts_)
-            + ToString (_stmt_)
+            + ToString (_single_constant_)
+            + ToString (_constants_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _stmts_ == child )
+        if ( _single_constant_ == child )
         {
-            _stmts_ = null;
+            _single_constant_ = null;
             return;
         }
-        if ( _stmt_ == child )
+        if ( _constants_ == child )
         {
-            _stmt_ = null;
+            _constants_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _stmts_ == oldChild )
+        if ( _single_constant_ == oldChild )
         {
-            SetStmts ((PStmts) newChild);
+            SetSingleConstant ((PSingleConstant) newChild);
             return;
         }
-        if ( _stmt_ == oldChild )
+        if ( _constants_ == oldChild )
         {
-            SetStmt ((PStmt) newChild);
+            SetConstants ((PConstants) newChild);
             return;
         }
     }
 
 }
-public sealed class ASingleStmts : PStmts
+public sealed class ASingleConstants : PConstants
 {
-    private PStmt _stmt_;
+    private PSingleConstant _single_constant_;
 
-    public ASingleStmts ()
+    public ASingleConstants ()
     {
     }
 
-    public ASingleStmts (
-            PStmt _stmt_
+    public ASingleConstants (
+            PSingleConstant _single_constant_
     )
     {
-        SetStmt (_stmt_);
+        SetSingleConstant (_single_constant_);
     }
 
     public override Object Clone()
     {
-        return new ASingleStmts (
-            (PStmt)CloneNode (_stmt_)
+        return new ASingleConstants (
+            (PSingleConstant)CloneNode (_single_constant_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseASingleStmts(this);
+        ((Analysis) sw).CaseASingleConstants(this);
     }
 
-    public PStmt GetStmt ()
+    public PSingleConstant GetSingleConstant ()
     {
-        return _stmt_;
+        return _single_constant_;
     }
 
-    public void SetStmt (PStmt node)
+    public void SetSingleConstant (PSingleConstant node)
     {
-        if(_stmt_ != null)
+        if(_single_constant_ != null)
         {
-            _stmt_.Parent(null);
+            _single_constant_.Parent(null);
         }
 
         if(node != null)
@@ -297,318 +431,92 @@ public sealed class ASingleStmts : PStmts
             node.Parent(this);
         }
 
-        _stmt_ = node;
+        _single_constant_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_stmt_)
+            + ToString (_single_constant_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _stmt_ == child )
+        if ( _single_constant_ == child )
         {
-            _stmt_ = null;
+            _single_constant_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _stmt_ == oldChild )
+        if ( _single_constant_ == oldChild )
         {
-            SetStmt ((PStmt) newChild);
+            SetSingleConstant ((PSingleConstant) newChild);
             return;
         }
     }
 
 }
-public sealed class AAssignStmt : PStmt
+public sealed class AStrSingleConstant : PSingleConstant
 {
-    private PAssignstmt _assignstmt_;
-
-    public AAssignStmt ()
-    {
-    }
-
-    public AAssignStmt (
-            PAssignstmt _assignstmt_
-    )
-    {
-        SetAssignstmt (_assignstmt_);
-    }
-
-    public override Object Clone()
-    {
-        return new AAssignStmt (
-            (PAssignstmt)CloneNode (_assignstmt_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAAssignStmt(this);
-    }
-
-    public PAssignstmt GetAssignstmt ()
-    {
-        return _assignstmt_;
-    }
-
-    public void SetAssignstmt (PAssignstmt node)
-    {
-        if(_assignstmt_ != null)
-        {
-            _assignstmt_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _assignstmt_ = node;
-    }
-
-    public override string ToString()
-    {
-        return ""
-            + ToString (_assignstmt_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _assignstmt_ == child )
-        {
-            _assignstmt_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _assignstmt_ == oldChild )
-        {
-            SetAssignstmt ((PAssignstmt) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class ADeclStmt : PStmt
-{
-    private PDeclarestmt _declarestmt_;
-
-    public ADeclStmt ()
-    {
-    }
-
-    public ADeclStmt (
-            PDeclarestmt _declarestmt_
-    )
-    {
-        SetDeclarestmt (_declarestmt_);
-    }
-
-    public override Object Clone()
-    {
-        return new ADeclStmt (
-            (PDeclarestmt)CloneNode (_declarestmt_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseADeclStmt(this);
-    }
-
-    public PDeclarestmt GetDeclarestmt ()
-    {
-        return _declarestmt_;
-    }
-
-    public void SetDeclarestmt (PDeclarestmt node)
-    {
-        if(_declarestmt_ != null)
-        {
-            _declarestmt_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _declarestmt_ = node;
-    }
-
-    public override string ToString()
-    {
-        return ""
-            + ToString (_declarestmt_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _declarestmt_ == child )
-        {
-            _declarestmt_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _declarestmt_ == oldChild )
-        {
-            SetDeclarestmt ((PDeclarestmt) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class AFcStmt : PStmt
-{
-    private PFunctioncall _functioncall_;
-
-    public AFcStmt ()
-    {
-    }
-
-    public AFcStmt (
-            PFunctioncall _functioncall_
-    )
-    {
-        SetFunctioncall (_functioncall_);
-    }
-
-    public override Object Clone()
-    {
-        return new AFcStmt (
-            (PFunctioncall)CloneNode (_functioncall_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAFcStmt(this);
-    }
-
-    public PFunctioncall GetFunctioncall ()
-    {
-        return _functioncall_;
-    }
-
-    public void SetFunctioncall (PFunctioncall node)
-    {
-        if(_functioncall_ != null)
-        {
-            _functioncall_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _functioncall_ = node;
-    }
-
-    public override string ToString()
-    {
-        return ""
-            + ToString (_functioncall_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _functioncall_ == child )
-        {
-            _functioncall_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _functioncall_ == oldChild )
-        {
-            SetFunctioncall ((PFunctioncall) newChild);
-            return;
-        }
-    }
-
-}
-public sealed class AAssignstmt : PAssignstmt
-{
-    private TId _id_;
+    private TConstant _constant_;
+    private TId _type_;
+    private TId _var_;
     private TAssign _assign_;
-    private PExpr _expr_;
+    private TString _string_;
     private TEol _eol_;
 
-    public AAssignstmt ()
+    public AStrSingleConstant ()
     {
     }
 
-    public AAssignstmt (
-            TId _id_,
+    public AStrSingleConstant (
+            TConstant _constant_,
+            TId _type_,
+            TId _var_,
             TAssign _assign_,
-            PExpr _expr_,
+            TString _string_,
             TEol _eol_
     )
     {
-        SetId (_id_);
+        SetConstant (_constant_);
+        SetType (_type_);
+        SetVar (_var_);
         SetAssign (_assign_);
-        SetExpr (_expr_);
+        SetString (_string_);
         SetEol (_eol_);
     }
 
     public override Object Clone()
     {
-        return new AAssignstmt (
-            (TId)CloneNode (_id_),
+        return new AStrSingleConstant (
+            (TConstant)CloneNode (_constant_),
+            (TId)CloneNode (_type_),
+            (TId)CloneNode (_var_),
             (TAssign)CloneNode (_assign_),
-            (PExpr)CloneNode (_expr_),
+            (TString)CloneNode (_string_),
             (TEol)CloneNode (_eol_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAAssignstmt(this);
+        ((Analysis) sw).CaseAStrSingleConstant(this);
     }
 
-    public TId GetId ()
+    public TConstant GetConstant ()
     {
-        return _id_;
+        return _constant_;
     }
 
-    public void SetId (TId node)
+    public void SetConstant (TConstant node)
     {
-        if(_id_ != null)
+        if(_constant_ != null)
         {
-            _id_.Parent(null);
+            _constant_.Parent(null);
         }
 
         if(node != null)
@@ -621,7 +529,55 @@ public sealed class AAssignstmt : PAssignstmt
             node.Parent(this);
         }
 
-        _id_ = node;
+        _constant_ = node;
+    }
+    public TId GetType ()
+    {
+        return _type_;
+    }
+
+    public void SetType (TId node)
+    {
+        if(_type_ != null)
+        {
+            _type_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_ = node;
+    }
+    public TId GetVar ()
+    {
+        return _var_;
+    }
+
+    public void SetVar (TId node)
+    {
+        if(_var_ != null)
+        {
+            _var_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _var_ = node;
     }
     public TAssign GetAssign ()
     {
@@ -647,16 +603,16 @@ public sealed class AAssignstmt : PAssignstmt
 
         _assign_ = node;
     }
-    public PExpr GetExpr ()
+    public TString GetString ()
     {
-        return _expr_;
+        return _string_;
     }
 
-    public void SetExpr (PExpr node)
+    public void SetString (TString node)
     {
-        if(_expr_ != null)
+        if(_string_ != null)
         {
-            _expr_.Parent(null);
+            _string_.Parent(null);
         }
 
         if(node != null)
@@ -669,7 +625,7 @@ public sealed class AAssignstmt : PAssignstmt
             node.Parent(this);
         }
 
-        _expr_ = node;
+        _string_ = node;
     }
     public TEol GetEol ()
     {
@@ -699,18 +655,30 @@ public sealed class AAssignstmt : PAssignstmt
     public override string ToString()
     {
         return ""
-            + ToString (_id_)
+            + ToString (_constant_)
+            + ToString (_type_)
+            + ToString (_var_)
             + ToString (_assign_)
-            + ToString (_expr_)
+            + ToString (_string_)
             + ToString (_eol_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _id_ == child )
+        if ( _constant_ == child )
         {
-            _id_ = null;
+            _constant_ = null;
+            return;
+        }
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _var_ == child )
+        {
+            _var_ = null;
             return;
         }
         if ( _assign_ == child )
@@ -718,9 +686,9 @@ public sealed class AAssignstmt : PAssignstmt
             _assign_ = null;
             return;
         }
-        if ( _expr_ == child )
+        if ( _string_ == child )
         {
-            _expr_ = null;
+            _string_ = null;
             return;
         }
         if ( _eol_ == child )
@@ -732,9 +700,19 @@ public sealed class AAssignstmt : PAssignstmt
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _id_ == oldChild )
+        if ( _constant_ == oldChild )
         {
-            SetId ((TId) newChild);
+            SetConstant ((TConstant) newChild);
+            return;
+        }
+        if ( _type_ == oldChild )
+        {
+            SetType ((TId) newChild);
+            return;
+        }
+        if ( _var_ == oldChild )
+        {
+            SetVar ((TId) newChild);
             return;
         }
         if ( _assign_ == oldChild )
@@ -742,9 +720,9 @@ public sealed class AAssignstmt : PAssignstmt
             SetAssign ((TAssign) newChild);
             return;
         }
-        if ( _expr_ == oldChild )
+        if ( _string_ == oldChild )
         {
-            SetExpr ((PExpr) newChild);
+            SetString ((TString) newChild);
             return;
         }
         if ( _eol_ == oldChild )
@@ -755,51 +733,63 @@ public sealed class AAssignstmt : PAssignstmt
     }
 
 }
-public sealed class ADeclarestmt : PDeclarestmt
+public sealed class AExprSingleConstant : PSingleConstant
 {
-    private TId _typename_;
-    private TId _varname_;
+    private TConstant _constant_;
+    private TId _type_;
+    private TId _var_;
+    private TAssign _assign_;
+    private POrExpr _or_expr_;
     private TEol _eol_;
 
-    public ADeclarestmt ()
+    public AExprSingleConstant ()
     {
     }
 
-    public ADeclarestmt (
-            TId _typename_,
-            TId _varname_,
+    public AExprSingleConstant (
+            TConstant _constant_,
+            TId _type_,
+            TId _var_,
+            TAssign _assign_,
+            POrExpr _or_expr_,
             TEol _eol_
     )
     {
-        SetTypename (_typename_);
-        SetVarname (_varname_);
+        SetConstant (_constant_);
+        SetType (_type_);
+        SetVar (_var_);
+        SetAssign (_assign_);
+        SetOrExpr (_or_expr_);
         SetEol (_eol_);
     }
 
     public override Object Clone()
     {
-        return new ADeclarestmt (
-            (TId)CloneNode (_typename_),
-            (TId)CloneNode (_varname_),
+        return new AExprSingleConstant (
+            (TConstant)CloneNode (_constant_),
+            (TId)CloneNode (_type_),
+            (TId)CloneNode (_var_),
+            (TAssign)CloneNode (_assign_),
+            (POrExpr)CloneNode (_or_expr_),
             (TEol)CloneNode (_eol_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseADeclarestmt(this);
+        ((Analysis) sw).CaseAExprSingleConstant(this);
     }
 
-    public TId GetTypename ()
+    public TConstant GetConstant ()
     {
-        return _typename_;
+        return _constant_;
     }
 
-    public void SetTypename (TId node)
+    public void SetConstant (TConstant node)
     {
-        if(_typename_ != null)
+        if(_constant_ != null)
         {
-            _typename_.Parent(null);
+            _constant_.Parent(null);
         }
 
         if(node != null)
@@ -812,18 +802,18 @@ public sealed class ADeclarestmt : PDeclarestmt
             node.Parent(this);
         }
 
-        _typename_ = node;
+        _constant_ = node;
     }
-    public TId GetVarname ()
+    public TId GetType ()
     {
-        return _varname_;
+        return _type_;
     }
 
-    public void SetVarname (TId node)
+    public void SetType (TId node)
     {
-        if(_varname_ != null)
+        if(_type_ != null)
         {
-            _varname_.Parent(null);
+            _type_.Parent(null);
         }
 
         if(node != null)
@@ -836,7 +826,79 @@ public sealed class ADeclarestmt : PDeclarestmt
             node.Parent(this);
         }
 
-        _varname_ = node;
+        _type_ = node;
+    }
+    public TId GetVar ()
+    {
+        return _var_;
+    }
+
+    public void SetVar (TId node)
+    {
+        if(_var_ != null)
+        {
+            _var_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _var_ = node;
+    }
+    public TAssign GetAssign ()
+    {
+        return _assign_;
+    }
+
+    public void SetAssign (TAssign node)
+    {
+        if(_assign_ != null)
+        {
+            _assign_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _assign_ = node;
+    }
+    public POrExpr GetOrExpr ()
+    {
+        return _or_expr_;
+    }
+
+    public void SetOrExpr (POrExpr node)
+    {
+        if(_or_expr_ != null)
+        {
+            _or_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_expr_ = node;
     }
     public TEol GetEol ()
     {
@@ -866,22 +928,40 @@ public sealed class ADeclarestmt : PDeclarestmt
     public override string ToString()
     {
         return ""
-            + ToString (_typename_)
-            + ToString (_varname_)
+            + ToString (_constant_)
+            + ToString (_type_)
+            + ToString (_var_)
+            + ToString (_assign_)
+            + ToString (_or_expr_)
             + ToString (_eol_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _typename_ == child )
+        if ( _constant_ == child )
         {
-            _typename_ = null;
+            _constant_ = null;
             return;
         }
-        if ( _varname_ == child )
+        if ( _type_ == child )
         {
-            _varname_ = null;
+            _type_ = null;
+            return;
+        }
+        if ( _var_ == child )
+        {
+            _var_ = null;
+            return;
+        }
+        if ( _assign_ == child )
+        {
+            _assign_ = null;
+            return;
+        }
+        if ( _or_expr_ == child )
+        {
+            _or_expr_ = null;
             return;
         }
         if ( _eol_ == child )
@@ -893,14 +973,29 @@ public sealed class ADeclarestmt : PDeclarestmt
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _typename_ == oldChild )
+        if ( _constant_ == oldChild )
         {
-            SetTypename ((TId) newChild);
+            SetConstant ((TConstant) newChild);
             return;
         }
-        if ( _varname_ == oldChild )
+        if ( _type_ == oldChild )
         {
-            SetVarname ((TId) newChild);
+            SetType ((TId) newChild);
+            return;
+        }
+        if ( _var_ == oldChild )
+        {
+            SetVar ((TId) newChild);
+            return;
+        }
+        if ( _assign_ == oldChild )
+        {
+            SetAssign ((TAssign) newChild);
+            return;
+        }
+        if ( _or_expr_ == oldChild )
+        {
+            SetOrExpr ((POrExpr) newChild);
             return;
         }
         if ( _eol_ == oldChild )
@@ -911,47 +1006,250 @@ public sealed class ADeclarestmt : PDeclarestmt
     }
 
 }
-public sealed class AFunctioncall : PFunctioncall
+public sealed class AMultipleFunctions : PFunctions
 {
-    private TId _id_;
-    private TLparen _lparen_;
-    private PArguments _arguments_;
-    private TRparen _rparen_;
-    private TEol _eol_;
+    private PSingleFunction _single_function_;
+    private PFunctions _functions_;
 
-    public AFunctioncall ()
+    public AMultipleFunctions ()
     {
     }
 
-    public AFunctioncall (
-            TId _id_,
-            TLparen _lparen_,
-            PArguments _arguments_,
-            TRparen _rparen_,
-            TEol _eol_
+    public AMultipleFunctions (
+            PSingleFunction _single_function_,
+            PFunctions _functions_
     )
     {
-        SetId (_id_);
-        SetLparen (_lparen_);
-        SetArguments (_arguments_);
-        SetRparen (_rparen_);
-        SetEol (_eol_);
+        SetSingleFunction (_single_function_);
+        SetFunctions (_functions_);
     }
 
     public override Object Clone()
     {
-        return new AFunctioncall (
-            (TId)CloneNode (_id_),
-            (TLparen)CloneNode (_lparen_),
-            (PArguments)CloneNode (_arguments_),
-            (TRparen)CloneNode (_rparen_),
-            (TEol)CloneNode (_eol_)
+        return new AMultipleFunctions (
+            (PSingleFunction)CloneNode (_single_function_),
+            (PFunctions)CloneNode (_functions_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAFunctioncall(this);
+        ((Analysis) sw).CaseAMultipleFunctions(this);
+    }
+
+    public PSingleFunction GetSingleFunction ()
+    {
+        return _single_function_;
+    }
+
+    public void SetSingleFunction (PSingleFunction node)
+    {
+        if(_single_function_ != null)
+        {
+            _single_function_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _single_function_ = node;
+    }
+    public PFunctions GetFunctions ()
+    {
+        return _functions_;
+    }
+
+    public void SetFunctions (PFunctions node)
+    {
+        if(_functions_ != null)
+        {
+            _functions_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _functions_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_single_function_)
+            + ToString (_functions_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _single_function_ == child )
+        {
+            _single_function_ = null;
+            return;
+        }
+        if ( _functions_ == child )
+        {
+            _functions_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _single_function_ == oldChild )
+        {
+            SetSingleFunction ((PSingleFunction) newChild);
+            return;
+        }
+        if ( _functions_ == oldChild )
+        {
+            SetFunctions ((PFunctions) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ASingleFunctions : PFunctions
+{
+    private PSingleFunction _single_function_;
+
+    public ASingleFunctions ()
+    {
+    }
+
+    public ASingleFunctions (
+            PSingleFunction _single_function_
+    )
+    {
+        SetSingleFunction (_single_function_);
+    }
+
+    public override Object Clone()
+    {
+        return new ASingleFunctions (
+            (PSingleFunction)CloneNode (_single_function_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASingleFunctions(this);
+    }
+
+    public PSingleFunction GetSingleFunction ()
+    {
+        return _single_function_;
+    }
+
+    public void SetSingleFunction (PSingleFunction node)
+    {
+        if(_single_function_ != null)
+        {
+            _single_function_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _single_function_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_single_function_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _single_function_ == child )
+        {
+            _single_function_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _single_function_ == oldChild )
+        {
+            SetSingleFunction ((PSingleFunction) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AParamsSingleFunction : PSingleFunction
+{
+    private TId _id_;
+    private TLparen _lparen_;
+    private PParams _params_;
+    private TRparen _rparen_;
+    private TLbrace _lbrace_;
+    private PStatements _statements_;
+    private TRbrace _rbrace_;
+
+    public AParamsSingleFunction ()
+    {
+    }
+
+    public AParamsSingleFunction (
+            TId _id_,
+            TLparen _lparen_,
+            PParams _params_,
+            TRparen _rparen_,
+            TLbrace _lbrace_,
+            PStatements _statements_,
+            TRbrace _rbrace_
+    )
+    {
+        SetId (_id_);
+        SetLparen (_lparen_);
+        SetParams (_params_);
+        SetRparen (_rparen_);
+        SetLbrace (_lbrace_);
+        SetStatements (_statements_);
+        SetRbrace (_rbrace_);
+    }
+
+    public override Object Clone()
+    {
+        return new AParamsSingleFunction (
+            (TId)CloneNode (_id_),
+            (TLparen)CloneNode (_lparen_),
+            (PParams)CloneNode (_params_),
+            (TRparen)CloneNode (_rparen_),
+            (TLbrace)CloneNode (_lbrace_),
+            (PStatements)CloneNode (_statements_),
+            (TRbrace)CloneNode (_rbrace_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAParamsSingleFunction(this);
     }
 
     public TId GetId ()
@@ -1002,16 +1300,16 @@ public sealed class AFunctioncall : PFunctioncall
 
         _lparen_ = node;
     }
-    public PArguments GetArguments ()
+    public PParams GetParams ()
     {
-        return _arguments_;
+        return _params_;
     }
 
-    public void SetArguments (PArguments node)
+    public void SetParams (PParams node)
     {
-        if(_arguments_ != null)
+        if(_params_ != null)
         {
-            _arguments_.Parent(null);
+            _params_.Parent(null);
         }
 
         if(node != null)
@@ -1024,7 +1322,2222 @@ public sealed class AFunctioncall : PFunctioncall
             node.Parent(this);
         }
 
-        _arguments_ = node;
+        _params_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+    public TLbrace GetLbrace ()
+    {
+        return _lbrace_;
+    }
+
+    public void SetLbrace (TLbrace node)
+    {
+        if(_lbrace_ != null)
+        {
+            _lbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lbrace_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+    public TRbrace GetRbrace ()
+    {
+        return _rbrace_;
+    }
+
+    public void SetRbrace (TRbrace node)
+    {
+        if(_rbrace_ != null)
+        {
+            _rbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rbrace_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_id_)
+            + ToString (_lparen_)
+            + ToString (_params_)
+            + ToString (_rparen_)
+            + ToString (_lbrace_)
+            + ToString (_statements_)
+            + ToString (_rbrace_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _params_ == child )
+        {
+            _params_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+        if ( _lbrace_ == child )
+        {
+            _lbrace_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+        if ( _rbrace_ == child )
+        {
+            _rbrace_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _id_ == oldChild )
+        {
+            SetId ((TId) newChild);
+            return;
+        }
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _params_ == oldChild )
+        {
+            SetParams ((PParams) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+        if ( _lbrace_ == oldChild )
+        {
+            SetLbrace ((TLbrace) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+        if ( _rbrace_ == oldChild )
+        {
+            SetRbrace ((TRbrace) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ANoParamsSingleFunction : PSingleFunction
+{
+    private TId _id_;
+    private TLparen _lparen_;
+    private TRparen _rparen_;
+    private TLbrace _lbrace_;
+    private PStatements _statements_;
+    private TRbrace _rbrace_;
+
+    public ANoParamsSingleFunction ()
+    {
+    }
+
+    public ANoParamsSingleFunction (
+            TId _id_,
+            TLparen _lparen_,
+            TRparen _rparen_,
+            TLbrace _lbrace_,
+            PStatements _statements_,
+            TRbrace _rbrace_
+    )
+    {
+        SetId (_id_);
+        SetLparen (_lparen_);
+        SetRparen (_rparen_);
+        SetLbrace (_lbrace_);
+        SetStatements (_statements_);
+        SetRbrace (_rbrace_);
+    }
+
+    public override Object Clone()
+    {
+        return new ANoParamsSingleFunction (
+            (TId)CloneNode (_id_),
+            (TLparen)CloneNode (_lparen_),
+            (TRparen)CloneNode (_rparen_),
+            (TLbrace)CloneNode (_lbrace_),
+            (PStatements)CloneNode (_statements_),
+            (TRbrace)CloneNode (_rbrace_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANoParamsSingleFunction(this);
+    }
+
+    public TId GetId ()
+    {
+        return _id_;
+    }
+
+    public void SetId (TId node)
+    {
+        if(_id_ != null)
+        {
+            _id_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _id_ = node;
+    }
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+    public TLbrace GetLbrace ()
+    {
+        return _lbrace_;
+    }
+
+    public void SetLbrace (TLbrace node)
+    {
+        if(_lbrace_ != null)
+        {
+            _lbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lbrace_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+    public TRbrace GetRbrace ()
+    {
+        return _rbrace_;
+    }
+
+    public void SetRbrace (TRbrace node)
+    {
+        if(_rbrace_ != null)
+        {
+            _rbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rbrace_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_id_)
+            + ToString (_lparen_)
+            + ToString (_rparen_)
+            + ToString (_lbrace_)
+            + ToString (_statements_)
+            + ToString (_rbrace_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+        if ( _lbrace_ == child )
+        {
+            _lbrace_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+        if ( _rbrace_ == child )
+        {
+            _rbrace_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _id_ == oldChild )
+        {
+            SetId ((TId) newChild);
+            return;
+        }
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+        if ( _lbrace_ == oldChild )
+        {
+            SetLbrace ((TLbrace) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+        if ( _rbrace_ == oldChild )
+        {
+            SetRbrace ((TRbrace) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AMultipleParams : PParams
+{
+    private TId _type_;
+    private TId _var_;
+    private TComma _comma_;
+    private PParams _params_;
+
+    public AMultipleParams ()
+    {
+    }
+
+    public AMultipleParams (
+            TId _type_,
+            TId _var_,
+            TComma _comma_,
+            PParams _params_
+    )
+    {
+        SetType (_type_);
+        SetVar (_var_);
+        SetComma (_comma_);
+        SetParams (_params_);
+    }
+
+    public override Object Clone()
+    {
+        return new AMultipleParams (
+            (TId)CloneNode (_type_),
+            (TId)CloneNode (_var_),
+            (TComma)CloneNode (_comma_),
+            (PParams)CloneNode (_params_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAMultipleParams(this);
+    }
+
+    public TId GetType ()
+    {
+        return _type_;
+    }
+
+    public void SetType (TId node)
+    {
+        if(_type_ != null)
+        {
+            _type_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_ = node;
+    }
+    public TId GetVar ()
+    {
+        return _var_;
+    }
+
+    public void SetVar (TId node)
+    {
+        if(_var_ != null)
+        {
+            _var_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _var_ = node;
+    }
+    public TComma GetComma ()
+    {
+        return _comma_;
+    }
+
+    public void SetComma (TComma node)
+    {
+        if(_comma_ != null)
+        {
+            _comma_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _comma_ = node;
+    }
+    public PParams GetParams ()
+    {
+        return _params_;
+    }
+
+    public void SetParams (PParams node)
+    {
+        if(_params_ != null)
+        {
+            _params_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _params_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_type_)
+            + ToString (_var_)
+            + ToString (_comma_)
+            + ToString (_params_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _var_ == child )
+        {
+            _var_ = null;
+            return;
+        }
+        if ( _comma_ == child )
+        {
+            _comma_ = null;
+            return;
+        }
+        if ( _params_ == child )
+        {
+            _params_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _type_ == oldChild )
+        {
+            SetType ((TId) newChild);
+            return;
+        }
+        if ( _var_ == oldChild )
+        {
+            SetVar ((TId) newChild);
+            return;
+        }
+        if ( _comma_ == oldChild )
+        {
+            SetComma ((TComma) newChild);
+            return;
+        }
+        if ( _params_ == oldChild )
+        {
+            SetParams ((PParams) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ASingleParams : PParams
+{
+    private TId _type_;
+    private TId _var_;
+
+    public ASingleParams ()
+    {
+    }
+
+    public ASingleParams (
+            TId _type_,
+            TId _var_
+    )
+    {
+        SetType (_type_);
+        SetVar (_var_);
+    }
+
+    public override Object Clone()
+    {
+        return new ASingleParams (
+            (TId)CloneNode (_type_),
+            (TId)CloneNode (_var_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASingleParams(this);
+    }
+
+    public TId GetType ()
+    {
+        return _type_;
+    }
+
+    public void SetType (TId node)
+    {
+        if(_type_ != null)
+        {
+            _type_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_ = node;
+    }
+    public TId GetVar ()
+    {
+        return _var_;
+    }
+
+    public void SetVar (TId node)
+    {
+        if(_var_ != null)
+        {
+            _var_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _var_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_type_)
+            + ToString (_var_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _var_ == child )
+        {
+            _var_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _type_ == oldChild )
+        {
+            SetType ((TId) newChild);
+            return;
+        }
+        if ( _var_ == oldChild )
+        {
+            SetVar ((TId) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AMainFunction : PMainFunction
+{
+    private TMain _main_;
+    private TLparen _lparen_;
+    private TRparen _rparen_;
+    private TLbrace _lbrace_;
+    private PStatements _statements_;
+    private TRbrace _rbrace_;
+
+    public AMainFunction ()
+    {
+    }
+
+    public AMainFunction (
+            TMain _main_,
+            TLparen _lparen_,
+            TRparen _rparen_,
+            TLbrace _lbrace_,
+            PStatements _statements_,
+            TRbrace _rbrace_
+    )
+    {
+        SetMain (_main_);
+        SetLparen (_lparen_);
+        SetRparen (_rparen_);
+        SetLbrace (_lbrace_);
+        SetStatements (_statements_);
+        SetRbrace (_rbrace_);
+    }
+
+    public override Object Clone()
+    {
+        return new AMainFunction (
+            (TMain)CloneNode (_main_),
+            (TLparen)CloneNode (_lparen_),
+            (TRparen)CloneNode (_rparen_),
+            (TLbrace)CloneNode (_lbrace_),
+            (PStatements)CloneNode (_statements_),
+            (TRbrace)CloneNode (_rbrace_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAMainFunction(this);
+    }
+
+    public TMain GetMain ()
+    {
+        return _main_;
+    }
+
+    public void SetMain (TMain node)
+    {
+        if(_main_ != null)
+        {
+            _main_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _main_ = node;
+    }
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+    public TLbrace GetLbrace ()
+    {
+        return _lbrace_;
+    }
+
+    public void SetLbrace (TLbrace node)
+    {
+        if(_lbrace_ != null)
+        {
+            _lbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lbrace_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+    public TRbrace GetRbrace ()
+    {
+        return _rbrace_;
+    }
+
+    public void SetRbrace (TRbrace node)
+    {
+        if(_rbrace_ != null)
+        {
+            _rbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rbrace_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_main_)
+            + ToString (_lparen_)
+            + ToString (_rparen_)
+            + ToString (_lbrace_)
+            + ToString (_statements_)
+            + ToString (_rbrace_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _main_ == child )
+        {
+            _main_ = null;
+            return;
+        }
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+        if ( _lbrace_ == child )
+        {
+            _lbrace_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+        if ( _rbrace_ == child )
+        {
+            _rbrace_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _main_ == oldChild )
+        {
+            SetMain ((TMain) newChild);
+            return;
+        }
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+        if ( _lbrace_ == oldChild )
+        {
+            SetLbrace ((TLbrace) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+        if ( _rbrace_ == oldChild )
+        {
+            SetRbrace ((TRbrace) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AMultipleStatements : PStatements
+{
+    private PLoc _loc_;
+    private PStatements _statements_;
+
+    public AMultipleStatements ()
+    {
+    }
+
+    public AMultipleStatements (
+            PLoc _loc_,
+            PStatements _statements_
+    )
+    {
+        SetLoc (_loc_);
+        SetStatements (_statements_);
+    }
+
+    public override Object Clone()
+    {
+        return new AMultipleStatements (
+            (PLoc)CloneNode (_loc_),
+            (PStatements)CloneNode (_statements_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAMultipleStatements(this);
+    }
+
+    public PLoc GetLoc ()
+    {
+        return _loc_;
+    }
+
+    public void SetLoc (PLoc node)
+    {
+        if(_loc_ != null)
+        {
+            _loc_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _loc_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_loc_)
+            + ToString (_statements_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _loc_ == child )
+        {
+            _loc_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _loc_ == oldChild )
+        {
+            SetLoc ((PLoc) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ASingleStatements : PStatements
+{
+    private PLoc _loc_;
+
+    public ASingleStatements ()
+    {
+    }
+
+    public ASingleStatements (
+            PLoc _loc_
+    )
+    {
+        SetLoc (_loc_);
+    }
+
+    public override Object Clone()
+    {
+        return new ASingleStatements (
+            (PLoc)CloneNode (_loc_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASingleStatements(this);
+    }
+
+    public PLoc GetLoc ()
+    {
+        return _loc_;
+    }
+
+    public void SetLoc (PLoc node)
+    {
+        if(_loc_ != null)
+        {
+            _loc_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _loc_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_loc_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _loc_ == child )
+        {
+            _loc_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _loc_ == oldChild )
+        {
+            SetLoc ((PLoc) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ADeclLoc : PLoc
+{
+    private PDeclarationCode _declaration_code_;
+
+    public ADeclLoc ()
+    {
+    }
+
+    public ADeclLoc (
+            PDeclarationCode _declaration_code_
+    )
+    {
+        SetDeclarationCode (_declaration_code_);
+    }
+
+    public override Object Clone()
+    {
+        return new ADeclLoc (
+            (PDeclarationCode)CloneNode (_declaration_code_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseADeclLoc(this);
+    }
+
+    public PDeclarationCode GetDeclarationCode ()
+    {
+        return _declaration_code_;
+    }
+
+    public void SetDeclarationCode (PDeclarationCode node)
+    {
+        if(_declaration_code_ != null)
+        {
+            _declaration_code_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _declaration_code_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_declaration_code_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _declaration_code_ == child )
+        {
+            _declaration_code_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _declaration_code_ == oldChild )
+        {
+            SetDeclarationCode ((PDeclarationCode) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AAssignLoc : PLoc
+{
+    private PAssignmentCode _assignment_code_;
+
+    public AAssignLoc ()
+    {
+    }
+
+    public AAssignLoc (
+            PAssignmentCode _assignment_code_
+    )
+    {
+        SetAssignmentCode (_assignment_code_);
+    }
+
+    public override Object Clone()
+    {
+        return new AAssignLoc (
+            (PAssignmentCode)CloneNode (_assignment_code_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAAssignLoc(this);
+    }
+
+    public PAssignmentCode GetAssignmentCode ()
+    {
+        return _assignment_code_;
+    }
+
+    public void SetAssignmentCode (PAssignmentCode node)
+    {
+        if(_assignment_code_ != null)
+        {
+            _assignment_code_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _assignment_code_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_assignment_code_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _assignment_code_ == child )
+        {
+            _assignment_code_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _assignment_code_ == oldChild )
+        {
+            SetAssignmentCode ((PAssignmentCode) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AFuncCallLoc : PLoc
+{
+    private PFunctionCall _function_call_;
+
+    public AFuncCallLoc ()
+    {
+    }
+
+    public AFuncCallLoc (
+            PFunctionCall _function_call_
+    )
+    {
+        SetFunctionCall (_function_call_);
+    }
+
+    public override Object Clone()
+    {
+        return new AFuncCallLoc (
+            (PFunctionCall)CloneNode (_function_call_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFuncCallLoc(this);
+    }
+
+    public PFunctionCall GetFunctionCall ()
+    {
+        return _function_call_;
+    }
+
+    public void SetFunctionCall (PFunctionCall node)
+    {
+        if(_function_call_ != null)
+        {
+            _function_call_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _function_call_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_function_call_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _function_call_ == child )
+        {
+            _function_call_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _function_call_ == oldChild )
+        {
+            SetFunctionCall ((PFunctionCall) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ACondLoc : PLoc
+{
+    private PConditionalCode _conditional_code_;
+
+    public ACondLoc ()
+    {
+    }
+
+    public ACondLoc (
+            PConditionalCode _conditional_code_
+    )
+    {
+        SetConditionalCode (_conditional_code_);
+    }
+
+    public override Object Clone()
+    {
+        return new ACondLoc (
+            (PConditionalCode)CloneNode (_conditional_code_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseACondLoc(this);
+    }
+
+    public PConditionalCode GetConditionalCode ()
+    {
+        return _conditional_code_;
+    }
+
+    public void SetConditionalCode (PConditionalCode node)
+    {
+        if(_conditional_code_ != null)
+        {
+            _conditional_code_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _conditional_code_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_conditional_code_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _conditional_code_ == child )
+        {
+            _conditional_code_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _conditional_code_ == oldChild )
+        {
+            SetConditionalCode ((PConditionalCode) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ADeclarationCode : PDeclarationCode
+{
+    private TId _type_;
+    private TId _var_;
+    private TEol _eol_;
+
+    public ADeclarationCode ()
+    {
+    }
+
+    public ADeclarationCode (
+            TId _type_,
+            TId _var_,
+            TEol _eol_
+    )
+    {
+        SetType (_type_);
+        SetVar (_var_);
+        SetEol (_eol_);
+    }
+
+    public override Object Clone()
+    {
+        return new ADeclarationCode (
+            (TId)CloneNode (_type_),
+            (TId)CloneNode (_var_),
+            (TEol)CloneNode (_eol_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseADeclarationCode(this);
+    }
+
+    public TId GetType ()
+    {
+        return _type_;
+    }
+
+    public void SetType (TId node)
+    {
+        if(_type_ != null)
+        {
+            _type_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _type_ = node;
+    }
+    public TId GetVar ()
+    {
+        return _var_;
+    }
+
+    public void SetVar (TId node)
+    {
+        if(_var_ != null)
+        {
+            _var_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _var_ = node;
+    }
+    public TEol GetEol ()
+    {
+        return _eol_;
+    }
+
+    public void SetEol (TEol node)
+    {
+        if(_eol_ != null)
+        {
+            _eol_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _eol_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_type_)
+            + ToString (_var_)
+            + ToString (_eol_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _type_ == child )
+        {
+            _type_ = null;
+            return;
+        }
+        if ( _var_ == child )
+        {
+            _var_ = null;
+            return;
+        }
+        if ( _eol_ == child )
+        {
+            _eol_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _type_ == oldChild )
+        {
+            SetType ((TId) newChild);
+            return;
+        }
+        if ( _var_ == oldChild )
+        {
+            SetVar ((TId) newChild);
+            return;
+        }
+        if ( _eol_ == oldChild )
+        {
+            SetEol ((TEol) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AStrAssignmentCode : PAssignmentCode
+{
+    private TId _id_;
+    private TAssign _assign_;
+    private TString _string_;
+    private TEol _eol_;
+
+    public AStrAssignmentCode ()
+    {
+    }
+
+    public AStrAssignmentCode (
+            TId _id_,
+            TAssign _assign_,
+            TString _string_,
+            TEol _eol_
+    )
+    {
+        SetId (_id_);
+        SetAssign (_assign_);
+        SetString (_string_);
+        SetEol (_eol_);
+    }
+
+    public override Object Clone()
+    {
+        return new AStrAssignmentCode (
+            (TId)CloneNode (_id_),
+            (TAssign)CloneNode (_assign_),
+            (TString)CloneNode (_string_),
+            (TEol)CloneNode (_eol_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAStrAssignmentCode(this);
+    }
+
+    public TId GetId ()
+    {
+        return _id_;
+    }
+
+    public void SetId (TId node)
+    {
+        if(_id_ != null)
+        {
+            _id_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _id_ = node;
+    }
+    public TAssign GetAssign ()
+    {
+        return _assign_;
+    }
+
+    public void SetAssign (TAssign node)
+    {
+        if(_assign_ != null)
+        {
+            _assign_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _assign_ = node;
+    }
+    public TString GetString ()
+    {
+        return _string_;
+    }
+
+    public void SetString (TString node)
+    {
+        if(_string_ != null)
+        {
+            _string_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _string_ = node;
+    }
+    public TEol GetEol ()
+    {
+        return _eol_;
+    }
+
+    public void SetEol (TEol node)
+    {
+        if(_eol_ != null)
+        {
+            _eol_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _eol_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_id_)
+            + ToString (_assign_)
+            + ToString (_string_)
+            + ToString (_eol_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+        if ( _assign_ == child )
+        {
+            _assign_ = null;
+            return;
+        }
+        if ( _string_ == child )
+        {
+            _string_ = null;
+            return;
+        }
+        if ( _eol_ == child )
+        {
+            _eol_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _id_ == oldChild )
+        {
+            SetId ((TId) newChild);
+            return;
+        }
+        if ( _assign_ == oldChild )
+        {
+            SetAssign ((TAssign) newChild);
+            return;
+        }
+        if ( _string_ == oldChild )
+        {
+            SetString ((TString) newChild);
+            return;
+        }
+        if ( _eol_ == oldChild )
+        {
+            SetEol ((TEol) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AExprAssignmentCode : PAssignmentCode
+{
+    private TId _id_;
+    private TAssign _assign_;
+    private POrExpr _or_expr_;
+    private TEol _eol_;
+
+    public AExprAssignmentCode ()
+    {
+    }
+
+    public AExprAssignmentCode (
+            TId _id_,
+            TAssign _assign_,
+            POrExpr _or_expr_,
+            TEol _eol_
+    )
+    {
+        SetId (_id_);
+        SetAssign (_assign_);
+        SetOrExpr (_or_expr_);
+        SetEol (_eol_);
+    }
+
+    public override Object Clone()
+    {
+        return new AExprAssignmentCode (
+            (TId)CloneNode (_id_),
+            (TAssign)CloneNode (_assign_),
+            (POrExpr)CloneNode (_or_expr_),
+            (TEol)CloneNode (_eol_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAExprAssignmentCode(this);
+    }
+
+    public TId GetId ()
+    {
+        return _id_;
+    }
+
+    public void SetId (TId node)
+    {
+        if(_id_ != null)
+        {
+            _id_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _id_ = node;
+    }
+    public TAssign GetAssign ()
+    {
+        return _assign_;
+    }
+
+    public void SetAssign (TAssign node)
+    {
+        if(_assign_ != null)
+        {
+            _assign_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _assign_ = node;
+    }
+    public POrExpr GetOrExpr ()
+    {
+        return _or_expr_;
+    }
+
+    public void SetOrExpr (POrExpr node)
+    {
+        if(_or_expr_ != null)
+        {
+            _or_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_expr_ = node;
+    }
+    public TEol GetEol ()
+    {
+        return _eol_;
+    }
+
+    public void SetEol (TEol node)
+    {
+        if(_eol_ != null)
+        {
+            _eol_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _eol_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_id_)
+            + ToString (_assign_)
+            + ToString (_or_expr_)
+            + ToString (_eol_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+        if ( _assign_ == child )
+        {
+            _assign_ = null;
+            return;
+        }
+        if ( _or_expr_ == child )
+        {
+            _or_expr_ = null;
+            return;
+        }
+        if ( _eol_ == child )
+        {
+            _eol_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _id_ == oldChild )
+        {
+            SetId ((TId) newChild);
+            return;
+        }
+        if ( _assign_ == oldChild )
+        {
+            SetAssign ((TAssign) newChild);
+            return;
+        }
+        if ( _or_expr_ == oldChild )
+        {
+            SetOrExpr ((POrExpr) newChild);
+            return;
+        }
+        if ( _eol_ == oldChild )
+        {
+            SetEol ((TEol) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AParamsFunctionCall : PFunctionCall
+{
+    private TId _id_;
+    private TLparen _lparen_;
+    private PArgs _args_;
+    private TRparen _rparen_;
+    private TEol _eol_;
+
+    public AParamsFunctionCall ()
+    {
+    }
+
+    public AParamsFunctionCall (
+            TId _id_,
+            TLparen _lparen_,
+            PArgs _args_,
+            TRparen _rparen_,
+            TEol _eol_
+    )
+    {
+        SetId (_id_);
+        SetLparen (_lparen_);
+        SetArgs (_args_);
+        SetRparen (_rparen_);
+        SetEol (_eol_);
+    }
+
+    public override Object Clone()
+    {
+        return new AParamsFunctionCall (
+            (TId)CloneNode (_id_),
+            (TLparen)CloneNode (_lparen_),
+            (PArgs)CloneNode (_args_),
+            (TRparen)CloneNode (_rparen_),
+            (TEol)CloneNode (_eol_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAParamsFunctionCall(this);
+    }
+
+    public TId GetId ()
+    {
+        return _id_;
+    }
+
+    public void SetId (TId node)
+    {
+        if(_id_ != null)
+        {
+            _id_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _id_ = node;
+    }
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public PArgs GetArgs ()
+    {
+        return _args_;
+    }
+
+    public void SetArgs (PArgs node)
+    {
+        if(_args_ != null)
+        {
+            _args_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _args_ = node;
     }
     public TRparen GetRparen ()
     {
@@ -1080,7 +3593,7 @@ public sealed class AFunctioncall : PFunctioncall
         return ""
             + ToString (_id_)
             + ToString (_lparen_)
-            + ToString (_arguments_)
+            + ToString (_args_)
             + ToString (_rparen_)
             + ToString (_eol_)
         ;
@@ -1098,9 +3611,9 @@ public sealed class AFunctioncall : PFunctioncall
             _lparen_ = null;
             return;
         }
-        if ( _arguments_ == child )
+        if ( _args_ == child )
         {
-            _arguments_ = null;
+            _args_ = null;
             return;
         }
         if ( _rparen_ == child )
@@ -1127,9 +3640,9 @@ public sealed class AFunctioncall : PFunctioncall
             SetLparen ((TLparen) newChild);
             return;
         }
-        if ( _arguments_ == oldChild )
+        if ( _args_ == oldChild )
         {
-            SetArguments ((PArguments) newChild);
+            SetArgs ((PArgs) newChild);
             return;
         }
         if ( _rparen_ == oldChild )
@@ -1145,51 +3658,55 @@ public sealed class AFunctioncall : PFunctioncall
     }
 
 }
-public sealed class AMultipleArguments : PArguments
+public sealed class ANoParamsFunctionCall : PFunctionCall
 {
-    private PArgument _argument_;
-    private TComma _comma_;
-    private PArguments _arguments_;
+    private TId _id_;
+    private TLparen _lparen_;
+    private TRparen _rparen_;
+    private TEol _eol_;
 
-    public AMultipleArguments ()
+    public ANoParamsFunctionCall ()
     {
     }
 
-    public AMultipleArguments (
-            PArgument _argument_,
-            TComma _comma_,
-            PArguments _arguments_
+    public ANoParamsFunctionCall (
+            TId _id_,
+            TLparen _lparen_,
+            TRparen _rparen_,
+            TEol _eol_
     )
     {
-        SetArgument (_argument_);
-        SetComma (_comma_);
-        SetArguments (_arguments_);
+        SetId (_id_);
+        SetLparen (_lparen_);
+        SetRparen (_rparen_);
+        SetEol (_eol_);
     }
 
     public override Object Clone()
     {
-        return new AMultipleArguments (
-            (PArgument)CloneNode (_argument_),
-            (TComma)CloneNode (_comma_),
-            (PArguments)CloneNode (_arguments_)
+        return new ANoParamsFunctionCall (
+            (TId)CloneNode (_id_),
+            (TLparen)CloneNode (_lparen_),
+            (TRparen)CloneNode (_rparen_),
+            (TEol)CloneNode (_eol_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAMultipleArguments(this);
+        ((Analysis) sw).CaseANoParamsFunctionCall(this);
     }
 
-    public PArgument GetArgument ()
+    public TId GetId ()
     {
-        return _argument_;
+        return _id_;
     }
 
-    public void SetArgument (PArgument node)
+    public void SetId (TId node)
     {
-        if(_argument_ != null)
+        if(_id_ != null)
         {
-            _argument_.Parent(null);
+            _id_.Parent(null);
         }
 
         if(node != null)
@@ -1202,7 +3719,1290 @@ public sealed class AMultipleArguments : PArguments
             node.Parent(this);
         }
 
-        _argument_ = node;
+        _id_ = node;
+    }
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+    public TEol GetEol ()
+    {
+        return _eol_;
+    }
+
+    public void SetEol (TEol node)
+    {
+        if(_eol_ != null)
+        {
+            _eol_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _eol_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_id_)
+            + ToString (_lparen_)
+            + ToString (_rparen_)
+            + ToString (_eol_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _id_ == child )
+        {
+            _id_ = null;
+            return;
+        }
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+        if ( _eol_ == child )
+        {
+            _eol_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _id_ == oldChild )
+        {
+            SetId ((TId) newChild);
+            return;
+        }
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+        if ( _eol_ == oldChild )
+        {
+            SetEol ((TEol) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AIfConditionalCode : PConditionalCode
+{
+    private PIfStatement _if_statement_;
+
+    public AIfConditionalCode ()
+    {
+    }
+
+    public AIfConditionalCode (
+            PIfStatement _if_statement_
+    )
+    {
+        SetIfStatement (_if_statement_);
+    }
+
+    public override Object Clone()
+    {
+        return new AIfConditionalCode (
+            (PIfStatement)CloneNode (_if_statement_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAIfConditionalCode(this);
+    }
+
+    public PIfStatement GetIfStatement ()
+    {
+        return _if_statement_;
+    }
+
+    public void SetIfStatement (PIfStatement node)
+    {
+        if(_if_statement_ != null)
+        {
+            _if_statement_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _if_statement_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_if_statement_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _if_statement_ == child )
+        {
+            _if_statement_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _if_statement_ == oldChild )
+        {
+            SetIfStatement ((PIfStatement) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AElseConditionalCode : PConditionalCode
+{
+    private PElseStatement _else_statement_;
+
+    public AElseConditionalCode ()
+    {
+    }
+
+    public AElseConditionalCode (
+            PElseStatement _else_statement_
+    )
+    {
+        SetElseStatement (_else_statement_);
+    }
+
+    public override Object Clone()
+    {
+        return new AElseConditionalCode (
+            (PElseStatement)CloneNode (_else_statement_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAElseConditionalCode(this);
+    }
+
+    public PElseStatement GetElseStatement ()
+    {
+        return _else_statement_;
+    }
+
+    public void SetElseStatement (PElseStatement node)
+    {
+        if(_else_statement_ != null)
+        {
+            _else_statement_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _else_statement_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_else_statement_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _else_statement_ == child )
+        {
+            _else_statement_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _else_statement_ == oldChild )
+        {
+            SetElseStatement ((PElseStatement) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AWhileConditionalCode : PConditionalCode
+{
+    private PWhileStatment _while_statment_;
+
+    public AWhileConditionalCode ()
+    {
+    }
+
+    public AWhileConditionalCode (
+            PWhileStatment _while_statment_
+    )
+    {
+        SetWhileStatment (_while_statment_);
+    }
+
+    public override Object Clone()
+    {
+        return new AWhileConditionalCode (
+            (PWhileStatment)CloneNode (_while_statment_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAWhileConditionalCode(this);
+    }
+
+    public PWhileStatment GetWhileStatment ()
+    {
+        return _while_statment_;
+    }
+
+    public void SetWhileStatment (PWhileStatment node)
+    {
+        if(_while_statment_ != null)
+        {
+            _while_statment_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _while_statment_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_while_statment_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _while_statment_ == child )
+        {
+            _while_statment_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _while_statment_ == oldChild )
+        {
+            SetWhileStatment ((PWhileStatment) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AIfStatement : PIfStatement
+{
+    private TIf _if_;
+    private TLparen _lparen_;
+    private POrExpr _or_expr_;
+    private TRparen _rparen_;
+    private TLbrace _lbrace_;
+    private PStatements _statements_;
+    private TRbrace _rbrace_;
+
+    public AIfStatement ()
+    {
+    }
+
+    public AIfStatement (
+            TIf _if_,
+            TLparen _lparen_,
+            POrExpr _or_expr_,
+            TRparen _rparen_,
+            TLbrace _lbrace_,
+            PStatements _statements_,
+            TRbrace _rbrace_
+    )
+    {
+        SetIf (_if_);
+        SetLparen (_lparen_);
+        SetOrExpr (_or_expr_);
+        SetRparen (_rparen_);
+        SetLbrace (_lbrace_);
+        SetStatements (_statements_);
+        SetRbrace (_rbrace_);
+    }
+
+    public override Object Clone()
+    {
+        return new AIfStatement (
+            (TIf)CloneNode (_if_),
+            (TLparen)CloneNode (_lparen_),
+            (POrExpr)CloneNode (_or_expr_),
+            (TRparen)CloneNode (_rparen_),
+            (TLbrace)CloneNode (_lbrace_),
+            (PStatements)CloneNode (_statements_),
+            (TRbrace)CloneNode (_rbrace_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAIfStatement(this);
+    }
+
+    public TIf GetIf ()
+    {
+        return _if_;
+    }
+
+    public void SetIf (TIf node)
+    {
+        if(_if_ != null)
+        {
+            _if_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _if_ = node;
+    }
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public POrExpr GetOrExpr ()
+    {
+        return _or_expr_;
+    }
+
+    public void SetOrExpr (POrExpr node)
+    {
+        if(_or_expr_ != null)
+        {
+            _or_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_expr_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+    public TLbrace GetLbrace ()
+    {
+        return _lbrace_;
+    }
+
+    public void SetLbrace (TLbrace node)
+    {
+        if(_lbrace_ != null)
+        {
+            _lbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lbrace_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+    public TRbrace GetRbrace ()
+    {
+        return _rbrace_;
+    }
+
+    public void SetRbrace (TRbrace node)
+    {
+        if(_rbrace_ != null)
+        {
+            _rbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rbrace_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_if_)
+            + ToString (_lparen_)
+            + ToString (_or_expr_)
+            + ToString (_rparen_)
+            + ToString (_lbrace_)
+            + ToString (_statements_)
+            + ToString (_rbrace_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _if_ == child )
+        {
+            _if_ = null;
+            return;
+        }
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _or_expr_ == child )
+        {
+            _or_expr_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+        if ( _lbrace_ == child )
+        {
+            _lbrace_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+        if ( _rbrace_ == child )
+        {
+            _rbrace_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _if_ == oldChild )
+        {
+            SetIf ((TIf) newChild);
+            return;
+        }
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _or_expr_ == oldChild )
+        {
+            SetOrExpr ((POrExpr) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+        if ( _lbrace_ == oldChild )
+        {
+            SetLbrace ((TLbrace) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+        if ( _rbrace_ == oldChild )
+        {
+            SetRbrace ((TRbrace) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AElseStatement : PElseStatement
+{
+    private PIfStatement _if_statement_;
+    private TElse _else_;
+    private TLbrace _lbrace_;
+    private PStatements _statements_;
+    private TRbrace _rbrace_;
+
+    public AElseStatement ()
+    {
+    }
+
+    public AElseStatement (
+            PIfStatement _if_statement_,
+            TElse _else_,
+            TLbrace _lbrace_,
+            PStatements _statements_,
+            TRbrace _rbrace_
+    )
+    {
+        SetIfStatement (_if_statement_);
+        SetElse (_else_);
+        SetLbrace (_lbrace_);
+        SetStatements (_statements_);
+        SetRbrace (_rbrace_);
+    }
+
+    public override Object Clone()
+    {
+        return new AElseStatement (
+            (PIfStatement)CloneNode (_if_statement_),
+            (TElse)CloneNode (_else_),
+            (TLbrace)CloneNode (_lbrace_),
+            (PStatements)CloneNode (_statements_),
+            (TRbrace)CloneNode (_rbrace_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAElseStatement(this);
+    }
+
+    public PIfStatement GetIfStatement ()
+    {
+        return _if_statement_;
+    }
+
+    public void SetIfStatement (PIfStatement node)
+    {
+        if(_if_statement_ != null)
+        {
+            _if_statement_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _if_statement_ = node;
+    }
+    public TElse GetElse ()
+    {
+        return _else_;
+    }
+
+    public void SetElse (TElse node)
+    {
+        if(_else_ != null)
+        {
+            _else_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _else_ = node;
+    }
+    public TLbrace GetLbrace ()
+    {
+        return _lbrace_;
+    }
+
+    public void SetLbrace (TLbrace node)
+    {
+        if(_lbrace_ != null)
+        {
+            _lbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lbrace_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+    public TRbrace GetRbrace ()
+    {
+        return _rbrace_;
+    }
+
+    public void SetRbrace (TRbrace node)
+    {
+        if(_rbrace_ != null)
+        {
+            _rbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rbrace_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_if_statement_)
+            + ToString (_else_)
+            + ToString (_lbrace_)
+            + ToString (_statements_)
+            + ToString (_rbrace_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _if_statement_ == child )
+        {
+            _if_statement_ = null;
+            return;
+        }
+        if ( _else_ == child )
+        {
+            _else_ = null;
+            return;
+        }
+        if ( _lbrace_ == child )
+        {
+            _lbrace_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+        if ( _rbrace_ == child )
+        {
+            _rbrace_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _if_statement_ == oldChild )
+        {
+            SetIfStatement ((PIfStatement) newChild);
+            return;
+        }
+        if ( _else_ == oldChild )
+        {
+            SetElse ((TElse) newChild);
+            return;
+        }
+        if ( _lbrace_ == oldChild )
+        {
+            SetLbrace ((TLbrace) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+        if ( _rbrace_ == oldChild )
+        {
+            SetRbrace ((TRbrace) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AWhileStatment : PWhileStatment
+{
+    private TWhile _while_;
+    private TLparen _lparen_;
+    private POrExpr _or_expr_;
+    private TRparen _rparen_;
+    private TLbrace _lbrace_;
+    private PStatements _statements_;
+    private TRbrace _rbrace_;
+
+    public AWhileStatment ()
+    {
+    }
+
+    public AWhileStatment (
+            TWhile _while_,
+            TLparen _lparen_,
+            POrExpr _or_expr_,
+            TRparen _rparen_,
+            TLbrace _lbrace_,
+            PStatements _statements_,
+            TRbrace _rbrace_
+    )
+    {
+        SetWhile (_while_);
+        SetLparen (_lparen_);
+        SetOrExpr (_or_expr_);
+        SetRparen (_rparen_);
+        SetLbrace (_lbrace_);
+        SetStatements (_statements_);
+        SetRbrace (_rbrace_);
+    }
+
+    public override Object Clone()
+    {
+        return new AWhileStatment (
+            (TWhile)CloneNode (_while_),
+            (TLparen)CloneNode (_lparen_),
+            (POrExpr)CloneNode (_or_expr_),
+            (TRparen)CloneNode (_rparen_),
+            (TLbrace)CloneNode (_lbrace_),
+            (PStatements)CloneNode (_statements_),
+            (TRbrace)CloneNode (_rbrace_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAWhileStatment(this);
+    }
+
+    public TWhile GetWhile ()
+    {
+        return _while_;
+    }
+
+    public void SetWhile (TWhile node)
+    {
+        if(_while_ != null)
+        {
+            _while_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _while_ = node;
+    }
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public POrExpr GetOrExpr ()
+    {
+        return _or_expr_;
+    }
+
+    public void SetOrExpr (POrExpr node)
+    {
+        if(_or_expr_ != null)
+        {
+            _or_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_expr_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+    public TLbrace GetLbrace ()
+    {
+        return _lbrace_;
+    }
+
+    public void SetLbrace (TLbrace node)
+    {
+        if(_lbrace_ != null)
+        {
+            _lbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lbrace_ = node;
+    }
+    public PStatements GetStatements ()
+    {
+        return _statements_;
+    }
+
+    public void SetStatements (PStatements node)
+    {
+        if(_statements_ != null)
+        {
+            _statements_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _statements_ = node;
+    }
+    public TRbrace GetRbrace ()
+    {
+        return _rbrace_;
+    }
+
+    public void SetRbrace (TRbrace node)
+    {
+        if(_rbrace_ != null)
+        {
+            _rbrace_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rbrace_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_while_)
+            + ToString (_lparen_)
+            + ToString (_or_expr_)
+            + ToString (_rparen_)
+            + ToString (_lbrace_)
+            + ToString (_statements_)
+            + ToString (_rbrace_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _while_ == child )
+        {
+            _while_ = null;
+            return;
+        }
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _or_expr_ == child )
+        {
+            _or_expr_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+        if ( _lbrace_ == child )
+        {
+            _lbrace_ = null;
+            return;
+        }
+        if ( _statements_ == child )
+        {
+            _statements_ = null;
+            return;
+        }
+        if ( _rbrace_ == child )
+        {
+            _rbrace_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _while_ == oldChild )
+        {
+            SetWhile ((TWhile) newChild);
+            return;
+        }
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _or_expr_ == oldChild )
+        {
+            SetOrExpr ((POrExpr) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+        if ( _lbrace_ == oldChild )
+        {
+            SetLbrace ((TLbrace) newChild);
+            return;
+        }
+        if ( _statements_ == oldChild )
+        {
+            SetStatements ((PStatements) newChild);
+            return;
+        }
+        if ( _rbrace_ == oldChild )
+        {
+            SetRbrace ((TRbrace) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AMultipleArithArgs : PArgs
+{
+    private PAddSub _add_sub_;
+    private TComma _comma_;
+    private PArgs _args_;
+
+    public AMultipleArithArgs ()
+    {
+    }
+
+    public AMultipleArithArgs (
+            PAddSub _add_sub_,
+            TComma _comma_,
+            PArgs _args_
+    )
+    {
+        SetAddSub (_add_sub_);
+        SetComma (_comma_);
+        SetArgs (_args_);
+    }
+
+    public override Object Clone()
+    {
+        return new AMultipleArithArgs (
+            (PAddSub)CloneNode (_add_sub_),
+            (TComma)CloneNode (_comma_),
+            (PArgs)CloneNode (_args_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAMultipleArithArgs(this);
+    }
+
+    public PAddSub GetAddSub ()
+    {
+        return _add_sub_;
+    }
+
+    public void SetAddSub (PAddSub node)
+    {
+        if(_add_sub_ != null)
+        {
+            _add_sub_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _add_sub_ = node;
     }
     public TComma GetComma ()
     {
@@ -1228,16 +5028,16 @@ public sealed class AMultipleArguments : PArguments
 
         _comma_ = node;
     }
-    public PArguments GetArguments ()
+    public PArgs GetArgs ()
     {
-        return _arguments_;
+        return _args_;
     }
 
-    public void SetArguments (PArguments node)
+    public void SetArgs (PArgs node)
     {
-        if(_arguments_ != null)
+        if(_args_ != null)
         {
-            _arguments_.Parent(null);
+            _args_.Parent(null);
         }
 
         if(node != null)
@@ -1250,23 +5050,23 @@ public sealed class AMultipleArguments : PArguments
             node.Parent(this);
         }
 
-        _arguments_ = node;
+        _args_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_argument_)
+            + ToString (_add_sub_)
             + ToString (_comma_)
-            + ToString (_arguments_)
+            + ToString (_args_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _argument_ == child )
+        if ( _add_sub_ == child )
         {
-            _argument_ = null;
+            _add_sub_ = null;
             return;
         }
         if ( _comma_ == child )
@@ -1274,18 +5074,18 @@ public sealed class AMultipleArguments : PArguments
             _comma_ = null;
             return;
         }
-        if ( _arguments_ == child )
+        if ( _args_ == child )
         {
-            _arguments_ = null;
+            _args_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _argument_ == oldChild )
+        if ( _add_sub_ == oldChild )
         {
-            SetArgument ((PArgument) newChild);
+            SetAddSub ((PAddSub) newChild);
             return;
         }
         if ( _comma_ == oldChild )
@@ -1293,87 +5093,59 @@ public sealed class AMultipleArguments : PArguments
             SetComma ((TComma) newChild);
             return;
         }
-        if ( _arguments_ == oldChild )
+        if ( _args_ == oldChild )
         {
-            SetArguments ((PArguments) newChild);
+            SetArgs ((PArgs) newChild);
             return;
         }
     }
 
 }
-public sealed class ANoneArguments : PArguments
+public sealed class AMultipleStringArgs : PArgs
 {
+    private TString _string_;
+    private TComma _comma_;
+    private PArgs _args_;
 
+    public AMultipleStringArgs ()
+    {
+    }
 
-    public ANoneArguments (
+    public AMultipleStringArgs (
+            TString _string_,
+            TComma _comma_,
+            PArgs _args_
     )
     {
+        SetString (_string_);
+        SetComma (_comma_);
+        SetArgs (_args_);
     }
 
     public override Object Clone()
     {
-        return new ANoneArguments (
+        return new AMultipleStringArgs (
+            (TString)CloneNode (_string_),
+            (TComma)CloneNode (_comma_),
+            (PArgs)CloneNode (_args_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseANoneArguments(this);
+        ((Analysis) sw).CaseAMultipleStringArgs(this);
     }
 
-
-    public override string ToString()
+    public TString GetString ()
     {
-        return ""
-        ;
+        return _string_;
     }
 
-    internal override void RemoveChild(Node child)
+    public void SetString (TString node)
     {
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-    }
-
-}
-public sealed class AArgument : PArgument
-{
-    private PExpr _expr_;
-
-    public AArgument ()
-    {
-    }
-
-    public AArgument (
-            PExpr _expr_
-    )
-    {
-        SetExpr (_expr_);
-    }
-
-    public override Object Clone()
-    {
-        return new AArgument (
-            (PExpr)CloneNode (_expr_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAArgument(this);
-    }
-
-    public PExpr GetExpr ()
-    {
-        return _expr_;
-    }
-
-    public void SetExpr (PExpr node)
-    {
-        if(_expr_ != null)
+        if(_string_ != null)
         {
-            _expr_.Parent(null);
+            _string_.Parent(null);
         }
 
         if(node != null)
@@ -1386,80 +5158,1788 @@ public sealed class AArgument : PArgument
             node.Parent(this);
         }
 
-        _expr_ = node;
+        _string_ = node;
+    }
+    public TComma GetComma ()
+    {
+        return _comma_;
+    }
+
+    public void SetComma (TComma node)
+    {
+        if(_comma_ != null)
+        {
+            _comma_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _comma_ = node;
+    }
+    public PArgs GetArgs ()
+    {
+        return _args_;
+    }
+
+    public void SetArgs (PArgs node)
+    {
+        if(_args_ != null)
+        {
+            _args_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _args_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_expr_)
+            + ToString (_string_)
+            + ToString (_comma_)
+            + ToString (_args_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _expr_ == child )
+        if ( _string_ == child )
         {
-            _expr_ = null;
+            _string_ = null;
+            return;
+        }
+        if ( _comma_ == child )
+        {
+            _comma_ = null;
+            return;
+        }
+        if ( _args_ == child )
+        {
+            _args_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _expr_ == oldChild )
+        if ( _string_ == oldChild )
         {
-            SetExpr ((PExpr) newChild);
+            SetString ((TString) newChild);
+            return;
+        }
+        if ( _comma_ == oldChild )
+        {
+            SetComma ((TComma) newChild);
+            return;
+        }
+        if ( _args_ == oldChild )
+        {
+            SetArgs ((PArgs) newChild);
             return;
         }
     }
 
 }
-public sealed class APlusExpr : PExpr
+public sealed class AArithArgs : PArgs
 {
-    private PExpr _expr_;
+    private PAddSub _add_sub_;
+
+    public AArithArgs ()
+    {
+    }
+
+    public AArithArgs (
+            PAddSub _add_sub_
+    )
+    {
+        SetAddSub (_add_sub_);
+    }
+
+    public override Object Clone()
+    {
+        return new AArithArgs (
+            (PAddSub)CloneNode (_add_sub_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAArithArgs(this);
+    }
+
+    public PAddSub GetAddSub ()
+    {
+        return _add_sub_;
+    }
+
+    public void SetAddSub (PAddSub node)
+    {
+        if(_add_sub_ != null)
+        {
+            _add_sub_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _add_sub_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_add_sub_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _add_sub_ == child )
+        {
+            _add_sub_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _add_sub_ == oldChild )
+        {
+            SetAddSub ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AStringArgs : PArgs
+{
+    private TString _string_;
+
+    public AStringArgs ()
+    {
+    }
+
+    public AStringArgs (
+            TString _string_
+    )
+    {
+        SetString (_string_);
+    }
+
+    public override Object Clone()
+    {
+        return new AStringArgs (
+            (TString)CloneNode (_string_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAStringArgs(this);
+    }
+
+    public TString GetString ()
+    {
+        return _string_;
+    }
+
+    public void SetString (TString node)
+    {
+        if(_string_ != null)
+        {
+            _string_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _string_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_string_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _string_ == child )
+        {
+            _string_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _string_ == oldChild )
+        {
+            SetString ((TString) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AOrOrExpr : POrExpr
+{
+    private POrExpr _or_expr_;
+    private TOr _or_;
+    private PAndExpr _and_expr_;
+
+    public AOrOrExpr ()
+    {
+    }
+
+    public AOrOrExpr (
+            POrExpr _or_expr_,
+            TOr _or_,
+            PAndExpr _and_expr_
+    )
+    {
+        SetOrExpr (_or_expr_);
+        SetOr (_or_);
+        SetAndExpr (_and_expr_);
+    }
+
+    public override Object Clone()
+    {
+        return new AOrOrExpr (
+            (POrExpr)CloneNode (_or_expr_),
+            (TOr)CloneNode (_or_),
+            (PAndExpr)CloneNode (_and_expr_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAOrOrExpr(this);
+    }
+
+    public POrExpr GetOrExpr ()
+    {
+        return _or_expr_;
+    }
+
+    public void SetOrExpr (POrExpr node)
+    {
+        if(_or_expr_ != null)
+        {
+            _or_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_expr_ = node;
+    }
+    public TOr GetOr ()
+    {
+        return _or_;
+    }
+
+    public void SetOr (TOr node)
+    {
+        if(_or_ != null)
+        {
+            _or_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_ = node;
+    }
+    public PAndExpr GetAndExpr ()
+    {
+        return _and_expr_;
+    }
+
+    public void SetAndExpr (PAndExpr node)
+    {
+        if(_and_expr_ != null)
+        {
+            _and_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _and_expr_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_or_expr_)
+            + ToString (_or_)
+            + ToString (_and_expr_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _or_expr_ == child )
+        {
+            _or_expr_ = null;
+            return;
+        }
+        if ( _or_ == child )
+        {
+            _or_ = null;
+            return;
+        }
+        if ( _and_expr_ == child )
+        {
+            _and_expr_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _or_expr_ == oldChild )
+        {
+            SetOrExpr ((POrExpr) newChild);
+            return;
+        }
+        if ( _or_ == oldChild )
+        {
+            SetOr ((TOr) newChild);
+            return;
+        }
+        if ( _and_expr_ == oldChild )
+        {
+            SetAndExpr ((PAndExpr) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APassOrExpr : POrExpr
+{
+    private PAndExpr _and_expr_;
+
+    public APassOrExpr ()
+    {
+    }
+
+    public APassOrExpr (
+            PAndExpr _and_expr_
+    )
+    {
+        SetAndExpr (_and_expr_);
+    }
+
+    public override Object Clone()
+    {
+        return new APassOrExpr (
+            (PAndExpr)CloneNode (_and_expr_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPassOrExpr(this);
+    }
+
+    public PAndExpr GetAndExpr ()
+    {
+        return _and_expr_;
+    }
+
+    public void SetAndExpr (PAndExpr node)
+    {
+        if(_and_expr_ != null)
+        {
+            _and_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _and_expr_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_and_expr_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _and_expr_ == child )
+        {
+            _and_expr_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _and_expr_ == oldChild )
+        {
+            SetAndExpr ((PAndExpr) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AAndAndExpr : PAndExpr
+{
+    private PAndExpr _and_expr_;
+    private TAnd _and_;
+    private PCompareExpr _compare_expr_;
+
+    public AAndAndExpr ()
+    {
+    }
+
+    public AAndAndExpr (
+            PAndExpr _and_expr_,
+            TAnd _and_,
+            PCompareExpr _compare_expr_
+    )
+    {
+        SetAndExpr (_and_expr_);
+        SetAnd (_and_);
+        SetCompareExpr (_compare_expr_);
+    }
+
+    public override Object Clone()
+    {
+        return new AAndAndExpr (
+            (PAndExpr)CloneNode (_and_expr_),
+            (TAnd)CloneNode (_and_),
+            (PCompareExpr)CloneNode (_compare_expr_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAAndAndExpr(this);
+    }
+
+    public PAndExpr GetAndExpr ()
+    {
+        return _and_expr_;
+    }
+
+    public void SetAndExpr (PAndExpr node)
+    {
+        if(_and_expr_ != null)
+        {
+            _and_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _and_expr_ = node;
+    }
+    public TAnd GetAnd ()
+    {
+        return _and_;
+    }
+
+    public void SetAnd (TAnd node)
+    {
+        if(_and_ != null)
+        {
+            _and_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _and_ = node;
+    }
+    public PCompareExpr GetCompareExpr ()
+    {
+        return _compare_expr_;
+    }
+
+    public void SetCompareExpr (PCompareExpr node)
+    {
+        if(_compare_expr_ != null)
+        {
+            _compare_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _compare_expr_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_and_expr_)
+            + ToString (_and_)
+            + ToString (_compare_expr_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _and_expr_ == child )
+        {
+            _and_expr_ = null;
+            return;
+        }
+        if ( _and_ == child )
+        {
+            _and_ = null;
+            return;
+        }
+        if ( _compare_expr_ == child )
+        {
+            _compare_expr_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _and_expr_ == oldChild )
+        {
+            SetAndExpr ((PAndExpr) newChild);
+            return;
+        }
+        if ( _and_ == oldChild )
+        {
+            SetAnd ((TAnd) newChild);
+            return;
+        }
+        if ( _compare_expr_ == oldChild )
+        {
+            SetCompareExpr ((PCompareExpr) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APassAndExpr : PAndExpr
+{
+    private PCompareExpr _compare_expr_;
+
+    public APassAndExpr ()
+    {
+    }
+
+    public APassAndExpr (
+            PCompareExpr _compare_expr_
+    )
+    {
+        SetCompareExpr (_compare_expr_);
+    }
+
+    public override Object Clone()
+    {
+        return new APassAndExpr (
+            (PCompareExpr)CloneNode (_compare_expr_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPassAndExpr(this);
+    }
+
+    public PCompareExpr GetCompareExpr ()
+    {
+        return _compare_expr_;
+    }
+
+    public void SetCompareExpr (PCompareExpr node)
+    {
+        if(_compare_expr_ != null)
+        {
+            _compare_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _compare_expr_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_compare_expr_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _compare_expr_ == child )
+        {
+            _compare_expr_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _compare_expr_ == oldChild )
+        {
+            SetCompareExpr ((PCompareExpr) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AEqCompareExpr : PCompareExpr
+{
+    private PAddSub _lhs_;
+    private TEquality _equality_;
+    private PAddSub _rhs_;
+
+    public AEqCompareExpr ()
+    {
+    }
+
+    public AEqCompareExpr (
+            PAddSub _lhs_,
+            TEquality _equality_,
+            PAddSub _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetEquality (_equality_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AEqCompareExpr (
+            (PAddSub)CloneNode (_lhs_),
+            (TEquality)CloneNode (_equality_),
+            (PAddSub)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAEqCompareExpr(this);
+    }
+
+    public PAddSub GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PAddSub node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public TEquality GetEquality ()
+    {
+        return _equality_;
+    }
+
+    public void SetEquality (TEquality node)
+    {
+        if(_equality_ != null)
+        {
+            _equality_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _equality_ = node;
+    }
+    public PAddSub GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PAddSub node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_equality_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _equality_ == child )
+        {
+            _equality_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PAddSub) newChild);
+            return;
+        }
+        if ( _equality_ == oldChild )
+        {
+            SetEquality ((TEquality) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AGeCompareExpr : PCompareExpr
+{
+    private PAddSub _lhs_;
+    private TGreaterequals _greaterequals_;
+    private PAddSub _rhs_;
+
+    public AGeCompareExpr ()
+    {
+    }
+
+    public AGeCompareExpr (
+            PAddSub _lhs_,
+            TGreaterequals _greaterequals_,
+            PAddSub _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetGreaterequals (_greaterequals_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AGeCompareExpr (
+            (PAddSub)CloneNode (_lhs_),
+            (TGreaterequals)CloneNode (_greaterequals_),
+            (PAddSub)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAGeCompareExpr(this);
+    }
+
+    public PAddSub GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PAddSub node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public TGreaterequals GetGreaterequals ()
+    {
+        return _greaterequals_;
+    }
+
+    public void SetGreaterequals (TGreaterequals node)
+    {
+        if(_greaterequals_ != null)
+        {
+            _greaterequals_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _greaterequals_ = node;
+    }
+    public PAddSub GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PAddSub node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_greaterequals_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _greaterequals_ == child )
+        {
+            _greaterequals_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PAddSub) newChild);
+            return;
+        }
+        if ( _greaterequals_ == oldChild )
+        {
+            SetGreaterequals ((TGreaterequals) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AGtCompareExpr : PCompareExpr
+{
+    private PAddSub _lhs_;
+    private TGreaterthan _greaterthan_;
+    private PAddSub _rhs_;
+
+    public AGtCompareExpr ()
+    {
+    }
+
+    public AGtCompareExpr (
+            PAddSub _lhs_,
+            TGreaterthan _greaterthan_,
+            PAddSub _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetGreaterthan (_greaterthan_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new AGtCompareExpr (
+            (PAddSub)CloneNode (_lhs_),
+            (TGreaterthan)CloneNode (_greaterthan_),
+            (PAddSub)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAGtCompareExpr(this);
+    }
+
+    public PAddSub GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PAddSub node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public TGreaterthan GetGreaterthan ()
+    {
+        return _greaterthan_;
+    }
+
+    public void SetGreaterthan (TGreaterthan node)
+    {
+        if(_greaterthan_ != null)
+        {
+            _greaterthan_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _greaterthan_ = node;
+    }
+    public PAddSub GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PAddSub node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_greaterthan_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _greaterthan_ == child )
+        {
+            _greaterthan_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PAddSub) newChild);
+            return;
+        }
+        if ( _greaterthan_ == oldChild )
+        {
+            SetGreaterthan ((TGreaterthan) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALeCompareExpr : PCompareExpr
+{
+    private PAddSub _lhs_;
+    private TLessequals _lessequals_;
+    private PAddSub _rhs_;
+
+    public ALeCompareExpr ()
+    {
+    }
+
+    public ALeCompareExpr (
+            PAddSub _lhs_,
+            TLessequals _lessequals_,
+            PAddSub _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetLessequals (_lessequals_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALeCompareExpr (
+            (PAddSub)CloneNode (_lhs_),
+            (TLessequals)CloneNode (_lessequals_),
+            (PAddSub)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALeCompareExpr(this);
+    }
+
+    public PAddSub GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PAddSub node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public TLessequals GetLessequals ()
+    {
+        return _lessequals_;
+    }
+
+    public void SetLessequals (TLessequals node)
+    {
+        if(_lessequals_ != null)
+        {
+            _lessequals_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lessequals_ = node;
+    }
+    public PAddSub GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PAddSub node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_lessequals_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _lessequals_ == child )
+        {
+            _lessequals_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PAddSub) newChild);
+            return;
+        }
+        if ( _lessequals_ == oldChild )
+        {
+            SetLessequals ((TLessequals) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ALtCompareExpr : PCompareExpr
+{
+    private PAddSub _lhs_;
+    private TLessthan _lessthan_;
+    private PAddSub _rhs_;
+
+    public ALtCompareExpr ()
+    {
+    }
+
+    public ALtCompareExpr (
+            PAddSub _lhs_,
+            TLessthan _lessthan_,
+            PAddSub _rhs_
+    )
+    {
+        SetLhs (_lhs_);
+        SetLessthan (_lessthan_);
+        SetRhs (_rhs_);
+    }
+
+    public override Object Clone()
+    {
+        return new ALtCompareExpr (
+            (PAddSub)CloneNode (_lhs_),
+            (TLessthan)CloneNode (_lessthan_),
+            (PAddSub)CloneNode (_rhs_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseALtCompareExpr(this);
+    }
+
+    public PAddSub GetLhs ()
+    {
+        return _lhs_;
+    }
+
+    public void SetLhs (PAddSub node)
+    {
+        if(_lhs_ != null)
+        {
+            _lhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lhs_ = node;
+    }
+    public TLessthan GetLessthan ()
+    {
+        return _lessthan_;
+    }
+
+    public void SetLessthan (TLessthan node)
+    {
+        if(_lessthan_ != null)
+        {
+            _lessthan_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lessthan_ = node;
+    }
+    public PAddSub GetRhs ()
+    {
+        return _rhs_;
+    }
+
+    public void SetRhs (PAddSub node)
+    {
+        if(_rhs_ != null)
+        {
+            _rhs_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rhs_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lhs_)
+            + ToString (_lessthan_)
+            + ToString (_rhs_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lhs_ == child )
+        {
+            _lhs_ = null;
+            return;
+        }
+        if ( _lessthan_ == child )
+        {
+            _lessthan_ = null;
+            return;
+        }
+        if ( _rhs_ == child )
+        {
+            _rhs_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lhs_ == oldChild )
+        {
+            SetLhs ((PAddSub) newChild);
+            return;
+        }
+        if ( _lessthan_ == oldChild )
+        {
+            SetLessthan ((TLessthan) newChild);
+            return;
+        }
+        if ( _rhs_ == oldChild )
+        {
+            SetRhs ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APassCompareExpr : PCompareExpr
+{
+    private PAddSub _add_sub_;
+
+    public APassCompareExpr ()
+    {
+    }
+
+    public APassCompareExpr (
+            PAddSub _add_sub_
+    )
+    {
+        SetAddSub (_add_sub_);
+    }
+
+    public override Object Clone()
+    {
+        return new APassCompareExpr (
+            (PAddSub)CloneNode (_add_sub_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPassCompareExpr(this);
+    }
+
+    public PAddSub GetAddSub ()
+    {
+        return _add_sub_;
+    }
+
+    public void SetAddSub (PAddSub node)
+    {
+        if(_add_sub_ != null)
+        {
+            _add_sub_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _add_sub_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_add_sub_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _add_sub_ == child )
+        {
+            _add_sub_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _add_sub_ == oldChild )
+        {
+            SetAddSub ((PAddSub) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ASubtAddSub : PAddSub
+{
+    private PAddSub _add_sub_;
+    private TSubtract _subtract_;
+    private PMultDiv _mult_div_;
+
+    public ASubtAddSub ()
+    {
+    }
+
+    public ASubtAddSub (
+            PAddSub _add_sub_,
+            TSubtract _subtract_,
+            PMultDiv _mult_div_
+    )
+    {
+        SetAddSub (_add_sub_);
+        SetSubtract (_subtract_);
+        SetMultDiv (_mult_div_);
+    }
+
+    public override Object Clone()
+    {
+        return new ASubtAddSub (
+            (PAddSub)CloneNode (_add_sub_),
+            (TSubtract)CloneNode (_subtract_),
+            (PMultDiv)CloneNode (_mult_div_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseASubtAddSub(this);
+    }
+
+    public PAddSub GetAddSub ()
+    {
+        return _add_sub_;
+    }
+
+    public void SetAddSub (PAddSub node)
+    {
+        if(_add_sub_ != null)
+        {
+            _add_sub_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _add_sub_ = node;
+    }
+    public TSubtract GetSubtract ()
+    {
+        return _subtract_;
+    }
+
+    public void SetSubtract (TSubtract node)
+    {
+        if(_subtract_ != null)
+        {
+            _subtract_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _subtract_ = node;
+    }
+    public PMultDiv GetMultDiv ()
+    {
+        return _mult_div_;
+    }
+
+    public void SetMultDiv (PMultDiv node)
+    {
+        if(_mult_div_ != null)
+        {
+            _mult_div_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _mult_div_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_add_sub_)
+            + ToString (_subtract_)
+            + ToString (_mult_div_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _add_sub_ == child )
+        {
+            _add_sub_ = null;
+            return;
+        }
+        if ( _subtract_ == child )
+        {
+            _subtract_ = null;
+            return;
+        }
+        if ( _mult_div_ == child )
+        {
+            _mult_div_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _add_sub_ == oldChild )
+        {
+            SetAddSub ((PAddSub) newChild);
+            return;
+        }
+        if ( _subtract_ == oldChild )
+        {
+            SetSubtract ((TSubtract) newChild);
+            return;
+        }
+        if ( _mult_div_ == oldChild )
+        {
+            SetMultDiv ((PMultDiv) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AAddAddSub : PAddSub
+{
+    private PAddSub _add_sub_;
     private TPlus _plus_;
-    private PExpr2 _expr2_;
+    private PMultDiv _mult_div_;
 
-    public APlusExpr ()
+    public AAddAddSub ()
     {
     }
 
-    public APlusExpr (
-            PExpr _expr_,
+    public AAddAddSub (
+            PAddSub _add_sub_,
             TPlus _plus_,
-            PExpr2 _expr2_
+            PMultDiv _mult_div_
     )
     {
-        SetExpr (_expr_);
+        SetAddSub (_add_sub_);
         SetPlus (_plus_);
-        SetExpr2 (_expr2_);
+        SetMultDiv (_mult_div_);
     }
 
     public override Object Clone()
     {
-        return new APlusExpr (
-            (PExpr)CloneNode (_expr_),
+        return new AAddAddSub (
+            (PAddSub)CloneNode (_add_sub_),
             (TPlus)CloneNode (_plus_),
-            (PExpr2)CloneNode (_expr2_)
+            (PMultDiv)CloneNode (_mult_div_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAPlusExpr(this);
+        ((Analysis) sw).CaseAAddAddSub(this);
     }
 
-    public PExpr GetExpr ()
+    public PAddSub GetAddSub ()
     {
-        return _expr_;
+        return _add_sub_;
     }
 
-    public void SetExpr (PExpr node)
+    public void SetAddSub (PAddSub node)
     {
-        if(_expr_ != null)
+        if(_add_sub_ != null)
         {
-            _expr_.Parent(null);
+            _add_sub_.Parent(null);
         }
 
         if(node != null)
@@ -1472,7 +6952,7 @@ public sealed class APlusExpr : PExpr
             node.Parent(this);
         }
 
-        _expr_ = node;
+        _add_sub_ = node;
     }
     public TPlus GetPlus ()
     {
@@ -1498,16 +6978,16 @@ public sealed class APlusExpr : PExpr
 
         _plus_ = node;
     }
-    public PExpr2 GetExpr2 ()
+    public PMultDiv GetMultDiv ()
     {
-        return _expr2_;
+        return _mult_div_;
     }
 
-    public void SetExpr2 (PExpr2 node)
+    public void SetMultDiv (PMultDiv node)
     {
-        if(_expr2_ != null)
+        if(_mult_div_ != null)
         {
-            _expr2_.Parent(null);
+            _mult_div_.Parent(null);
         }
 
         if(node != null)
@@ -1520,23 +7000,23 @@ public sealed class APlusExpr : PExpr
             node.Parent(this);
         }
 
-        _expr2_ = node;
+        _mult_div_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_expr_)
+            + ToString (_add_sub_)
             + ToString (_plus_)
-            + ToString (_expr2_)
+            + ToString (_mult_div_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _expr_ == child )
+        if ( _add_sub_ == child )
         {
-            _expr_ = null;
+            _add_sub_ = null;
             return;
         }
         if ( _plus_ == child )
@@ -1544,18 +7024,18 @@ public sealed class APlusExpr : PExpr
             _plus_ = null;
             return;
         }
-        if ( _expr2_ == child )
+        if ( _mult_div_ == child )
         {
-            _expr2_ = null;
+            _mult_div_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _expr_ == oldChild )
+        if ( _add_sub_ == oldChild )
         {
-            SetExpr ((PExpr) newChild);
+            SetAddSub ((PAddSub) newChild);
             return;
         }
         if ( _plus_ == oldChild )
@@ -1563,51 +7043,51 @@ public sealed class APlusExpr : PExpr
             SetPlus ((TPlus) newChild);
             return;
         }
-        if ( _expr2_ == oldChild )
+        if ( _mult_div_ == oldChild )
         {
-            SetExpr2 ((PExpr2) newChild);
+            SetMultDiv ((PMultDiv) newChild);
             return;
         }
     }
 
 }
-public sealed class APassExpr : PExpr
+public sealed class APassAddSub : PAddSub
 {
-    private PExpr2 _expr2_;
+    private PMultDiv _mult_div_;
 
-    public APassExpr ()
+    public APassAddSub ()
     {
     }
 
-    public APassExpr (
-            PExpr2 _expr2_
+    public APassAddSub (
+            PMultDiv _mult_div_
     )
     {
-        SetExpr2 (_expr2_);
+        SetMultDiv (_mult_div_);
     }
 
     public override Object Clone()
     {
-        return new APassExpr (
-            (PExpr2)CloneNode (_expr2_)
+        return new APassAddSub (
+            (PMultDiv)CloneNode (_mult_div_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAPassExpr(this);
+        ((Analysis) sw).CaseAPassAddSub(this);
     }
 
-    public PExpr2 GetExpr2 ()
+    public PMultDiv GetMultDiv ()
     {
-        return _expr2_;
+        return _mult_div_;
     }
 
-    public void SetExpr2 (PExpr2 node)
+    public void SetMultDiv (PMultDiv node)
     {
-        if(_expr2_ != null)
+        if(_mult_div_ != null)
         {
-            _expr2_.Parent(null);
+            _mult_div_.Parent(null);
         }
 
         if(node != null)
@@ -1620,80 +7100,80 @@ public sealed class APassExpr : PExpr
             node.Parent(this);
         }
 
-        _expr2_ = node;
+        _mult_div_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_expr2_)
+            + ToString (_mult_div_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _expr2_ == child )
+        if ( _mult_div_ == child )
         {
-            _expr2_ = null;
+            _mult_div_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _expr2_ == oldChild )
+        if ( _mult_div_ == oldChild )
         {
-            SetExpr2 ((PExpr2) newChild);
+            SetMultDiv ((PMultDiv) newChild);
             return;
         }
     }
 
 }
-public sealed class AMultExpr2 : PExpr2
+public sealed class AMultMultDiv : PMultDiv
 {
-    private PExpr2 _expr2_;
+    private PMultDiv _mult_div_;
     private TMult _mult_;
-    private POperand _operand_;
+    private PUnaryExpr _unary_expr_;
 
-    public AMultExpr2 ()
+    public AMultMultDiv ()
     {
     }
 
-    public AMultExpr2 (
-            PExpr2 _expr2_,
+    public AMultMultDiv (
+            PMultDiv _mult_div_,
             TMult _mult_,
-            POperand _operand_
+            PUnaryExpr _unary_expr_
     )
     {
-        SetExpr2 (_expr2_);
+        SetMultDiv (_mult_div_);
         SetMult (_mult_);
-        SetOperand (_operand_);
+        SetUnaryExpr (_unary_expr_);
     }
 
     public override Object Clone()
     {
-        return new AMultExpr2 (
-            (PExpr2)CloneNode (_expr2_),
+        return new AMultMultDiv (
+            (PMultDiv)CloneNode (_mult_div_),
             (TMult)CloneNode (_mult_),
-            (POperand)CloneNode (_operand_)
+            (PUnaryExpr)CloneNode (_unary_expr_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAMultExpr2(this);
+        ((Analysis) sw).CaseAMultMultDiv(this);
     }
 
-    public PExpr2 GetExpr2 ()
+    public PMultDiv GetMultDiv ()
     {
-        return _expr2_;
+        return _mult_div_;
     }
 
-    public void SetExpr2 (PExpr2 node)
+    public void SetMultDiv (PMultDiv node)
     {
-        if(_expr2_ != null)
+        if(_mult_div_ != null)
         {
-            _expr2_.Parent(null);
+            _mult_div_.Parent(null);
         }
 
         if(node != null)
@@ -1706,7 +7186,7 @@ public sealed class AMultExpr2 : PExpr2
             node.Parent(this);
         }
 
-        _expr2_ = node;
+        _mult_div_ = node;
     }
     public TMult GetMult ()
     {
@@ -1732,16 +7212,16 @@ public sealed class AMultExpr2 : PExpr2
 
         _mult_ = node;
     }
-    public POperand GetOperand ()
+    public PUnaryExpr GetUnaryExpr ()
     {
-        return _operand_;
+        return _unary_expr_;
     }
 
-    public void SetOperand (POperand node)
+    public void SetUnaryExpr (PUnaryExpr node)
     {
-        if(_operand_ != null)
+        if(_unary_expr_ != null)
         {
-            _operand_.Parent(null);
+            _unary_expr_.Parent(null);
         }
 
         if(node != null)
@@ -1754,23 +7234,23 @@ public sealed class AMultExpr2 : PExpr2
             node.Parent(this);
         }
 
-        _operand_ = node;
+        _unary_expr_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_expr2_)
+            + ToString (_mult_div_)
             + ToString (_mult_)
-            + ToString (_operand_)
+            + ToString (_unary_expr_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _expr2_ == child )
+        if ( _mult_div_ == child )
         {
-            _expr2_ = null;
+            _mult_div_ = null;
             return;
         }
         if ( _mult_ == child )
@@ -1778,18 +7258,18 @@ public sealed class AMultExpr2 : PExpr2
             _mult_ = null;
             return;
         }
-        if ( _operand_ == child )
+        if ( _unary_expr_ == child )
         {
-            _operand_ = null;
+            _unary_expr_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _expr2_ == oldChild )
+        if ( _mult_div_ == oldChild )
         {
-            SetExpr2 ((PExpr2) newChild);
+            SetMultDiv ((PMultDiv) newChild);
             return;
         }
         if ( _mult_ == oldChild )
@@ -1797,23 +7277,725 @@ public sealed class AMultExpr2 : PExpr2
             SetMult ((TMult) newChild);
             return;
         }
-        if ( _operand_ == oldChild )
+        if ( _unary_expr_ == oldChild )
         {
-            SetOperand ((POperand) newChild);
+            SetUnaryExpr ((PUnaryExpr) newChild);
             return;
         }
     }
 
 }
-public sealed class APassExpr2 : PExpr2
+public sealed class ADivMultDiv : PMultDiv
 {
-    private POperand _operand_;
+    private PMultDiv _mult_div_;
+    private TDivide _divide_;
+    private PUnaryExpr _unary_expr_;
 
-    public APassExpr2 ()
+    public ADivMultDiv ()
     {
     }
 
-    public APassExpr2 (
+    public ADivMultDiv (
+            PMultDiv _mult_div_,
+            TDivide _divide_,
+            PUnaryExpr _unary_expr_
+    )
+    {
+        SetMultDiv (_mult_div_);
+        SetDivide (_divide_);
+        SetUnaryExpr (_unary_expr_);
+    }
+
+    public override Object Clone()
+    {
+        return new ADivMultDiv (
+            (PMultDiv)CloneNode (_mult_div_),
+            (TDivide)CloneNode (_divide_),
+            (PUnaryExpr)CloneNode (_unary_expr_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseADivMultDiv(this);
+    }
+
+    public PMultDiv GetMultDiv ()
+    {
+        return _mult_div_;
+    }
+
+    public void SetMultDiv (PMultDiv node)
+    {
+        if(_mult_div_ != null)
+        {
+            _mult_div_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _mult_div_ = node;
+    }
+    public TDivide GetDivide ()
+    {
+        return _divide_;
+    }
+
+    public void SetDivide (TDivide node)
+    {
+        if(_divide_ != null)
+        {
+            _divide_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _divide_ = node;
+    }
+    public PUnaryExpr GetUnaryExpr ()
+    {
+        return _unary_expr_;
+    }
+
+    public void SetUnaryExpr (PUnaryExpr node)
+    {
+        if(_unary_expr_ != null)
+        {
+            _unary_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _unary_expr_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_mult_div_)
+            + ToString (_divide_)
+            + ToString (_unary_expr_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _mult_div_ == child )
+        {
+            _mult_div_ = null;
+            return;
+        }
+        if ( _divide_ == child )
+        {
+            _divide_ = null;
+            return;
+        }
+        if ( _unary_expr_ == child )
+        {
+            _unary_expr_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _mult_div_ == oldChild )
+        {
+            SetMultDiv ((PMultDiv) newChild);
+            return;
+        }
+        if ( _divide_ == oldChild )
+        {
+            SetDivide ((TDivide) newChild);
+            return;
+        }
+        if ( _unary_expr_ == oldChild )
+        {
+            SetUnaryExpr ((PUnaryExpr) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APassMultDiv : PMultDiv
+{
+    private PUnaryExpr _unary_expr_;
+
+    public APassMultDiv ()
+    {
+    }
+
+    public APassMultDiv (
+            PUnaryExpr _unary_expr_
+    )
+    {
+        SetUnaryExpr (_unary_expr_);
+    }
+
+    public override Object Clone()
+    {
+        return new APassMultDiv (
+            (PUnaryExpr)CloneNode (_unary_expr_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPassMultDiv(this);
+    }
+
+    public PUnaryExpr GetUnaryExpr ()
+    {
+        return _unary_expr_;
+    }
+
+    public void SetUnaryExpr (PUnaryExpr node)
+    {
+        if(_unary_expr_ != null)
+        {
+            _unary_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _unary_expr_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_unary_expr_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _unary_expr_ == child )
+        {
+            _unary_expr_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _unary_expr_ == oldChild )
+        {
+            SetUnaryExpr ((PUnaryExpr) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ANegationUnaryExpr : PUnaryExpr
+{
+    private TNegative _negative_;
+    private PParenthetical _parenthetical_;
+
+    public ANegationUnaryExpr ()
+    {
+    }
+
+    public ANegationUnaryExpr (
+            TNegative _negative_,
+            PParenthetical _parenthetical_
+    )
+    {
+        SetNegative (_negative_);
+        SetParenthetical (_parenthetical_);
+    }
+
+    public override Object Clone()
+    {
+        return new ANegationUnaryExpr (
+            (TNegative)CloneNode (_negative_),
+            (PParenthetical)CloneNode (_parenthetical_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANegationUnaryExpr(this);
+    }
+
+    public TNegative GetNegative ()
+    {
+        return _negative_;
+    }
+
+    public void SetNegative (TNegative node)
+    {
+        if(_negative_ != null)
+        {
+            _negative_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _negative_ = node;
+    }
+    public PParenthetical GetParenthetical ()
+    {
+        return _parenthetical_;
+    }
+
+    public void SetParenthetical (PParenthetical node)
+    {
+        if(_parenthetical_ != null)
+        {
+            _parenthetical_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _parenthetical_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_negative_)
+            + ToString (_parenthetical_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _negative_ == child )
+        {
+            _negative_ = null;
+            return;
+        }
+        if ( _parenthetical_ == child )
+        {
+            _parenthetical_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _negative_ == oldChild )
+        {
+            SetNegative ((TNegative) newChild);
+            return;
+        }
+        if ( _parenthetical_ == oldChild )
+        {
+            SetParenthetical ((PParenthetical) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class ANotUnaryExpr : PUnaryExpr
+{
+    private TNot _not_;
+    private PParenthetical _parenthetical_;
+
+    public ANotUnaryExpr ()
+    {
+    }
+
+    public ANotUnaryExpr (
+            TNot _not_,
+            PParenthetical _parenthetical_
+    )
+    {
+        SetNot (_not_);
+        SetParenthetical (_parenthetical_);
+    }
+
+    public override Object Clone()
+    {
+        return new ANotUnaryExpr (
+            (TNot)CloneNode (_not_),
+            (PParenthetical)CloneNode (_parenthetical_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseANotUnaryExpr(this);
+    }
+
+    public TNot GetNot ()
+    {
+        return _not_;
+    }
+
+    public void SetNot (TNot node)
+    {
+        if(_not_ != null)
+        {
+            _not_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _not_ = node;
+    }
+    public PParenthetical GetParenthetical ()
+    {
+        return _parenthetical_;
+    }
+
+    public void SetParenthetical (PParenthetical node)
+    {
+        if(_parenthetical_ != null)
+        {
+            _parenthetical_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _parenthetical_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_not_)
+            + ToString (_parenthetical_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _not_ == child )
+        {
+            _not_ = null;
+            return;
+        }
+        if ( _parenthetical_ == child )
+        {
+            _parenthetical_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _not_ == oldChild )
+        {
+            SetNot ((TNot) newChild);
+            return;
+        }
+        if ( _parenthetical_ == oldChild )
+        {
+            SetParenthetical ((PParenthetical) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APassUnaryExpr : PUnaryExpr
+{
+    private PParenthetical _parenthetical_;
+
+    public APassUnaryExpr ()
+    {
+    }
+
+    public APassUnaryExpr (
+            PParenthetical _parenthetical_
+    )
+    {
+        SetParenthetical (_parenthetical_);
+    }
+
+    public override Object Clone()
+    {
+        return new APassUnaryExpr (
+            (PParenthetical)CloneNode (_parenthetical_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPassUnaryExpr(this);
+    }
+
+    public PParenthetical GetParenthetical ()
+    {
+        return _parenthetical_;
+    }
+
+    public void SetParenthetical (PParenthetical node)
+    {
+        if(_parenthetical_ != null)
+        {
+            _parenthetical_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _parenthetical_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_parenthetical_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _parenthetical_ == child )
+        {
+            _parenthetical_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _parenthetical_ == oldChild )
+        {
+            SetParenthetical ((PParenthetical) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APrioParenthetical : PParenthetical
+{
+    private TLparen _lparen_;
+    private POrExpr _or_expr_;
+    private TRparen _rparen_;
+
+    public APrioParenthetical ()
+    {
+    }
+
+    public APrioParenthetical (
+            TLparen _lparen_,
+            POrExpr _or_expr_,
+            TRparen _rparen_
+    )
+    {
+        SetLparen (_lparen_);
+        SetOrExpr (_or_expr_);
+        SetRparen (_rparen_);
+    }
+
+    public override Object Clone()
+    {
+        return new APrioParenthetical (
+            (TLparen)CloneNode (_lparen_),
+            (POrExpr)CloneNode (_or_expr_),
+            (TRparen)CloneNode (_rparen_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAPrioParenthetical(this);
+    }
+
+    public TLparen GetLparen ()
+    {
+        return _lparen_;
+    }
+
+    public void SetLparen (TLparen node)
+    {
+        if(_lparen_ != null)
+        {
+            _lparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _lparen_ = node;
+    }
+    public POrExpr GetOrExpr ()
+    {
+        return _or_expr_;
+    }
+
+    public void SetOrExpr (POrExpr node)
+    {
+        if(_or_expr_ != null)
+        {
+            _or_expr_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _or_expr_ = node;
+    }
+    public TRparen GetRparen ()
+    {
+        return _rparen_;
+    }
+
+    public void SetRparen (TRparen node)
+    {
+        if(_rparen_ != null)
+        {
+            _rparen_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _rparen_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_lparen_)
+            + ToString (_or_expr_)
+            + ToString (_rparen_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _lparen_ == child )
+        {
+            _lparen_ = null;
+            return;
+        }
+        if ( _or_expr_ == child )
+        {
+            _or_expr_ = null;
+            return;
+        }
+        if ( _rparen_ == child )
+        {
+            _rparen_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _lparen_ == oldChild )
+        {
+            SetLparen ((TLparen) newChild);
+            return;
+        }
+        if ( _or_expr_ == oldChild )
+        {
+            SetOrExpr ((POrExpr) newChild);
+            return;
+        }
+        if ( _rparen_ == oldChild )
+        {
+            SetRparen ((TRparen) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class APassParenthetical : PParenthetical
+{
+    private POperand _operand_;
+
+    public APassParenthetical ()
+    {
+    }
+
+    public APassParenthetical (
             POperand _operand_
     )
     {
@@ -1822,14 +8004,14 @@ public sealed class APassExpr2 : PExpr2
 
     public override Object Clone()
     {
-        return new APassExpr2 (
+        return new APassParenthetical (
             (POperand)CloneNode (_operand_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAPassExpr2(this);
+        ((Analysis) sw).CaseAPassParenthetical(this);
     }
 
     public POperand GetOperand ()
@@ -1885,23 +8067,23 @@ public sealed class APassExpr2 : PExpr2
 }
 public sealed class AIntOperand : POperand
 {
-    private TInteger _integer_;
+    private TInt _int_;
 
     public AIntOperand ()
     {
     }
 
     public AIntOperand (
-            TInteger _integer_
+            TInt _int_
     )
     {
-        SetInteger (_integer_);
+        SetInt (_int_);
     }
 
     public override Object Clone()
     {
         return new AIntOperand (
-            (TInteger)CloneNode (_integer_)
+            (TInt)CloneNode (_int_)
         );
     }
 
@@ -1910,16 +8092,16 @@ public sealed class AIntOperand : POperand
         ((Analysis) sw).CaseAIntOperand(this);
     }
 
-    public TInteger GetInteger ()
+    public TInt GetInt ()
     {
-        return _integer_;
+        return _int_;
     }
 
-    public void SetInteger (TInteger node)
+    public void SetInt (TInt node)
     {
-        if(_integer_ != null)
+        if(_int_ != null)
         {
-            _integer_.Parent(null);
+            _int_.Parent(null);
         }
 
         if(node != null)
@@ -1932,44 +8114,122 @@ public sealed class AIntOperand : POperand
             node.Parent(this);
         }
 
-        _integer_ = node;
+        _int_ = node;
     }
 
     public override string ToString()
     {
         return ""
-            + ToString (_integer_)
+            + ToString (_int_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _integer_ == child )
+        if ( _int_ == child )
         {
-            _integer_ = null;
+            _int_ = null;
             return;
         }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _integer_ == oldChild )
+        if ( _int_ == oldChild )
         {
-            SetInteger ((TInteger) newChild);
+            SetInt ((TInt) newChild);
             return;
         }
     }
 
 }
-public sealed class AVariableOperand : POperand
+public sealed class AFloatOperand : POperand
 {
-    private TId _id_;
+    private TFloat _float_;
 
-    public AVariableOperand ()
+    public AFloatOperand ()
     {
     }
 
-    public AVariableOperand (
+    public AFloatOperand (
+            TFloat _float_
+    )
+    {
+        SetFloat (_float_);
+    }
+
+    public override Object Clone()
+    {
+        return new AFloatOperand (
+            (TFloat)CloneNode (_float_)
+        );
+    }
+
+    public override void Apply(Switch sw)
+    {
+        ((Analysis) sw).CaseAFloatOperand(this);
+    }
+
+    public TFloat GetFloat ()
+    {
+        return _float_;
+    }
+
+    public void SetFloat (TFloat node)
+    {
+        if(_float_ != null)
+        {
+            _float_.Parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.Parent() != null)
+            {
+                node.Parent().RemoveChild(node);
+            }
+
+            node.Parent(this);
+        }
+
+        _float_ = node;
+    }
+
+    public override string ToString()
+    {
+        return ""
+            + ToString (_float_)
+        ;
+    }
+
+    internal override void RemoveChild(Node child)
+    {
+        if ( _float_ == child )
+        {
+            _float_ = null;
+            return;
+        }
+    }
+
+    internal override void ReplaceChild(Node oldChild, Node newChild)
+    {
+        if ( _float_ == oldChild )
+        {
+            SetFloat ((TFloat) newChild);
+            return;
+        }
+    }
+
+}
+public sealed class AVarOperand : POperand
+{
+    private TId _id_;
+
+    public AVarOperand ()
+    {
+    }
+
+    public AVarOperand (
             TId _id_
     )
     {
@@ -1978,14 +8238,14 @@ public sealed class AVariableOperand : POperand
 
     public override Object Clone()
     {
-        return new AVariableOperand (
+        return new AVarOperand (
             (TId)CloneNode (_id_)
         );
     }
 
     public override void Apply(Switch sw)
     {
-        ((Analysis) sw).CaseAVariableOperand(this);
+        ((Analysis) sw).CaseAVarOperand(this);
     }
 
     public TId GetId ()
@@ -2039,88 +8299,10 @@ public sealed class AVariableOperand : POperand
     }
 
 }
-public sealed class AStringOperand : POperand
-{
-    private TString _string_;
-
-    public AStringOperand ()
-    {
-    }
-
-    public AStringOperand (
-            TString _string_
-    )
-    {
-        SetString (_string_);
-    }
-
-    public override Object Clone()
-    {
-        return new AStringOperand (
-            (TString)CloneNode (_string_)
-        );
-    }
-
-    public override void Apply(Switch sw)
-    {
-        ((Analysis) sw).CaseAStringOperand(this);
-    }
-
-    public TString GetString ()
-    {
-        return _string_;
-    }
-
-    public void SetString (TString node)
-    {
-        if(_string_ != null)
-        {
-            _string_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _string_ = node;
-    }
-
-    public override string ToString()
-    {
-        return ""
-            + ToString (_string_)
-        ;
-    }
-
-    internal override void RemoveChild(Node child)
-    {
-        if ( _string_ == child )
-        {
-            _string_ = null;
-            return;
-        }
-    }
-
-    internal override void ReplaceChild(Node oldChild, Node newChild)
-    {
-        if ( _string_ == oldChild )
-        {
-            SetString ((TString) newChild);
-            return;
-        }
-    }
-
-}
 
 public sealed class Start : Node
 {
-    private PProg _base_;
+    private PProgram _base_;
     private EOF _eof_;
 
     public Start()
@@ -2128,17 +8310,17 @@ public sealed class Start : Node
     }
 
     public Start(
-        PProg _base_,
+        PProgram _base_,
         EOF _eof_)
     {
-        SetPProg(_base_);
+        SetPProgram(_base_);
         SetEOF(_eof_);
     }
 
     public override Object Clone()
     {
         return new Start(
-            (PProg) CloneNode(_base_),
+            (PProgram) CloneNode(_base_),
             (EOF) CloneNode(_eof_));
     }
 
@@ -2147,11 +8329,11 @@ public sealed class Start : Node
         ((Analysis) sw).CaseStart(this);
     }
 
-    public PProg GetPProg()
+    public PProgram GetPProgram()
     {
         return _base_;
     }
-    public void SetPProg(PProg node)
+    public void SetPProgram(PProgram node)
     {
         if(_base_ != null)
         {
@@ -2213,7 +8395,7 @@ public sealed class Start : Node
     {
         if(_base_ == oldChild)
         {
-            SetPProg((PProg) newChild);
+            SetPProgram((PProgram) newChild);
             return;
         }
 

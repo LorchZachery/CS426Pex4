@@ -1,0 +1,138 @@
+// This language will do stuff in English language 
+
+Package CS426;
+
+Helpers //sets of things that we want to be treated the same
+	whitespaces = ' ' | 9 | 10 | 13;
+	whole = ['1'..'9'];
+	natural = ['0' + whole];
+	letter = [['a'..'z'] + ['A'..'Z']];
+	
+
+//Lexer Portion
+Tokens
+	// Operators and EOL
+	plus = 'plus';
+	mult = 'times';
+	subtract = 'minus';
+	divide = 'divide';
+	assign = 'equals';
+	
+	equality = 'same as'; //boolean operator
+	greaterthan = 'greater than';
+	lessthan = 'less than';
+	greaterequals = 'greater or equal to';
+	lessequals = 'less or equal to';
+	
+	and = 'and';
+	or = 'or';
+	not = 'not';
+	
+	lparen = '(';
+	rparen = ')';
+	lbrack = '[';
+	rbrack = ']';
+	lbrace = '{';
+	rbrace = '}';
+	
+	eol = 'end';
+	
+	if = 'if';
+	else = 'else';
+	while = 'while';
+	function = 'function';
+	constant = 'constant';
+	for = 'for';
+	main = 'main';
+	
+	comma = ',';
+	
+	//create "code" to make sure everything is tokenized
+	negative = ('-');
+	
+	
+	// Identifiers (variables)
+	id = ('_')?letter+('_')?((letter | whole)('_')?)*;
+	comment = 'COMMENT: '([[0..0xffff] - [10 + 13]])*;
+	
+	string = 'Quote: ' ([[0..0xffff] - ['`' + '/']] | '/`' | '//')* '`'; 
+	
+	// Program control
+	
+	//precedence = [lparen + rparen];
+	
+	//commands = [plus + minus + mult + subtract + divide + assign + equals + greaterthan + lessthan + greaterequals + lessequals + and + or + not];
+	
+	
+	//the ` after end quote is a reverse escape character, it escapes the quote because I really hope no one uses ` in a string normally (it's the //un-shifted ~, not a single quote ')
+	
+	
+	
+	// Literals
+	float = ('0' | whole(natural)*) ('.') natural(natural)* | ('0' | whole(natural)*) '.' (natural)+ ('e') ('-')? (natural)+;
+	int = '0' | whole (natural)*;
+	
+	
+	
+	//Whitespace
+	blank = whitespaces+;
+	
+Ignored Tokens
+	blank, comment;
+	
+// Parser Portion
+Productions
+	program = constants functions main_function;
+	
+	constants = {mult} single_constant constants | {single} single_constant;
+	single_constant = {str} constant [type]: id [var]: id assign string eol | {expr} constant [type]: id [var]: id assign or_expr eol;
+	//types = {str} string | {expr} or_expr;
+	
+	functions = {multiple} single_function functions | {single} single_function;
+	single_function = {params} id lparen params rparen lbrace statements rbrace | {no_params} id lparen rparen lbrace statements rbrace;
+	params = {multiple} [type]: id [var]: id comma params | {single} [type]: id [var]: id;
+	//param = [type]: id [var]: id;
+	
+	main_function = main lparen rparen lbrace statements rbrace;
+	
+	statements = {multiple} loc statements | {single} loc; //loc = line of code
+	loc = {decl} declaration_code | {assign} assignment_code | {func_call} function_call | {cond} conditional_code;
+	
+	declaration_code = [type]: id [var]: id eol;
+	assignment_code = {str} id assign string eol | {expr} id assign or_expr eol;
+	function_call = {params} id lparen args rparen eol | {no_params} id lparen rparen eol;
+	conditional_code = {if} if_statement | {else} else_statement | {while} while_statment;
+	
+	if_statement = if lparen or_expr rparen lbrace statements rbrace;
+	else_statement = if_statement else lbrace statements rbrace;
+	while_statment = while lparen or_expr rparen lbrace statements rbrace;
+	
+	
+	args = {multiple_arith} add_sub comma args | {multiple_string} string comma args | {arith} add_sub | {string} string;
+	// arg = {arith} add_sub | {string} string;
+	
+	or_expr = {or} or_expr or and_expr | {pass} and_expr;
+
+	and_expr = {and} and_expr and compare_expr | {pass} compare_expr;
+	
+	compare_expr = {eq} [lhs]: add_sub equality [rhs]: add_sub | {ge} [lhs]: add_sub greaterequals [rhs]: add_sub | {gt} [lhs]: add_sub greaterthan [rhs]: add_sub | {le} [lhs]: add_sub lessequals [rhs]: add_sub | {lt} [lhs]: add_sub lessthan [rhs]: add_sub | {pass} add_sub;
+
+	
+	add_sub = {subt} add_sub subtract mult_div | {add} add_sub plus mult_div | {pass} mult_div;
+	
+	mult_div = {mult} mult_div mult unary_expr | {div} mult_div divide unary_expr | {pass} unary_expr;
+	
+	unary_expr  = {negation} negative parenthetical | {not} not parenthetical | {pass} parenthetical;
+	
+	
+	parenthetical = {prio} lparen or_expr rparen | {pass} operand;
+	
+	operand = {int} int | {float} float | {var} id;
+	
+	
+	
+	
+	
+	
+	
+	
