@@ -755,10 +755,7 @@ public class Parser
     ArrayList New2()
     {
         ArrayList nodeList = new ArrayList();
-        ArrayList nodeArrayList1 = (ArrayList) Pop();
-        PSingleConstant psingleconstantNode2 = (PSingleConstant)nodeArrayList1[0];
         ASingleConstants pconstantsNode1 = new ASingleConstants (
-              psingleconstantNode2
         );
         nodeList.Add(pconstantsNode1);
         return nodeList;
@@ -832,10 +829,7 @@ public class Parser
     ArrayList New6()
     {
         ArrayList nodeList = new ArrayList();
-        ArrayList nodeArrayList1 = (ArrayList) Pop();
-        PSingleFunction psinglefunctionNode2 = (PSingleFunction)nodeArrayList1[0];
         ASingleFunctions pfunctionsNode1 = new ASingleFunctions (
-              psinglefunctionNode2
         );
         nodeList.Add(pfunctionsNode1);
         return nodeList;
@@ -1639,7 +1633,7 @@ public class Parser
 
     private static int[][][] actionTable = {
       new int[][] {
-        new int[] {-1, 3, 0},
+        new int[] {-1, 1, 2},
         new int[] {24, 0, 1},
       },
       new int[][] {
@@ -1651,7 +1645,7 @@ public class Parser
         new int[] {33, 2, -1},
       },
       new int[][] {
-        new int[] {-1, 3, 3},
+        new int[] {-1, 1, 6},
         new int[] {29, 0, 6},
       },
       new int[][] {
@@ -2352,13 +2346,12 @@ public class Parser
     };
 
     private static String[] errorMessages = {
-      "expecting: 'constant'",
+      "expecting: 'constant', 'main', id",
       "expecting: id",
       "expecting: EOF",
-      "expecting: 'constant', id",
+      "expecting: 'main', id",
       "expecting: '('",
       "expecting: 'main'",
-      "expecting: 'main', id",
       "expecting: 'equals'",
       "expecting: ')', id",
       "expecting: 'not', '(', negative, id, string, float, int",
@@ -2384,14 +2377,14 @@ public class Parser
     };
 
     private static int[] errors = {
-      0, 1, 2, 1, 3, 1, 4, 5, 6, 1, 7, 8, 4, 2, 5, 9, 
-      10, 1, 11, 11, 12, 13, 12, 14, 15, 14, 14, 16, 17, 17, 18, 14, 
-      14, 14, 14, 19, 20, 10, 10, 14, 21, 14, 3, 13, 3, 13, 13, 13, 
-      13, 13, 13, 13, 13, 13, 13, 4, 4, 22, 23, 24, 24, 24, 24, 24, 
-      25, 24, 24, 1, 19, 19, 14, 17, 17, 14, 14, 26, 26, 26, 26, 26, 
-      14, 14, 13, 13, 9, 27, 15, 6, 23, 10, 11, 23, 23, 21, 21, 15, 
-      16, 15, 20, 11, 28, 24, 19, 6, 2, 10, 10, 24, 24, 24, 9, 15, 
-      9, 23, 19, 19, 11, 24, 11, 24, 23, 23, 25, 24, 
+      0, 1, 2, 3, 0, 1, 4, 5, 3, 3, 6, 7, 4, 2, 5, 8, 
+      9, 1, 10, 10, 11, 12, 11, 13, 14, 13, 13, 15, 16, 16, 17, 13, 
+      13, 13, 13, 18, 19, 9, 9, 13, 20, 13, 0, 12, 0, 12, 12, 12, 
+      12, 12, 12, 12, 12, 12, 12, 4, 4, 21, 22, 23, 23, 23, 23, 23, 
+      24, 23, 23, 1, 18, 18, 13, 16, 16, 13, 13, 25, 25, 25, 25, 25, 
+      13, 13, 12, 12, 8, 26, 14, 3, 22, 9, 10, 22, 22, 20, 20, 14, 
+      15, 14, 19, 10, 27, 23, 18, 3, 2, 9, 9, 23, 23, 23, 8, 14, 
+      8, 22, 18, 18, 10, 23, 10, 23, 22, 22, 24, 23, 
     };
 }
 }

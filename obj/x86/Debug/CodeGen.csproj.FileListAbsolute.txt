@@ -15,3 +15,9 @@ C:\Users\Paul\Desktop\4 - AddMult - Code Generation\obj\x86\Debug\CodeGen.csproj
 C:\Users\Paul\Desktop\4 - AddMult - Code Generation\obj\x86\Debug\CodeGen.csproj.CoreCompileInputs.cache
 C:\Users\Paul\Desktop\4 - AddMult - Code Generation\obj\x86\Debug\ConsoleApplication.exe
 C:\Users\Paul\Desktop\4 - AddMult - Code Generation\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\Cadet_Admin\Desktop\CS426Pex4\bin\Debug\ConsoleApplication.exe
+C:\Users\Cadet_Admin\Desktop\CS426Pex4\bin\Debug\ConsoleApplication.pdb
+C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\CodeGen.csprojAssemblyReference.cache
+C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\CodeGen.csproj.CoreCompileInputs.cache
+C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\ConsoleApplication.pdb

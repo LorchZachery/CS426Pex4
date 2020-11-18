@@ -384,23 +384,16 @@ public sealed class AMultConstants : PConstants
 }
 public sealed class ASingleConstants : PConstants
 {
-    private PSingleConstant _single_constant_;
 
-    public ASingleConstants ()
-    {
-    }
 
     public ASingleConstants (
-            PSingleConstant _single_constant_
     )
     {
-        SetSingleConstant (_single_constant_);
     }
 
     public override Object Clone()
     {
         return new ASingleConstants (
-            (PSingleConstant)CloneNode (_single_constant_)
         );
     }
 
@@ -409,54 +402,19 @@ public sealed class ASingleConstants : PConstants
         ((Analysis) sw).CaseASingleConstants(this);
     }
 
-    public PSingleConstant GetSingleConstant ()
-    {
-        return _single_constant_;
-    }
-
-    public void SetSingleConstant (PSingleConstant node)
-    {
-        if(_single_constant_ != null)
-        {
-            _single_constant_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _single_constant_ = node;
-    }
 
     public override string ToString()
     {
         return ""
-            + ToString (_single_constant_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _single_constant_ == child )
-        {
-            _single_constant_ = null;
-            return;
-        }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _single_constant_ == oldChild )
-        {
-            SetSingleConstant ((PSingleConstant) newChild);
-            return;
-        }
     }
 
 }
@@ -1125,23 +1083,16 @@ public sealed class AMultipleFunctions : PFunctions
 }
 public sealed class ASingleFunctions : PFunctions
 {
-    private PSingleFunction _single_function_;
 
-    public ASingleFunctions ()
-    {
-    }
 
     public ASingleFunctions (
-            PSingleFunction _single_function_
     )
     {
-        SetSingleFunction (_single_function_);
     }
 
     public override Object Clone()
     {
         return new ASingleFunctions (
-            (PSingleFunction)CloneNode (_single_function_)
         );
     }
 
@@ -1150,54 +1101,19 @@ public sealed class ASingleFunctions : PFunctions
         ((Analysis) sw).CaseASingleFunctions(this);
     }
 
-    public PSingleFunction GetSingleFunction ()
-    {
-        return _single_function_;
-    }
-
-    public void SetSingleFunction (PSingleFunction node)
-    {
-        if(_single_function_ != null)
-        {
-            _single_function_.Parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.Parent() != null)
-            {
-                node.Parent().RemoveChild(node);
-            }
-
-            node.Parent(this);
-        }
-
-        _single_function_ = node;
-    }
 
     public override string ToString()
     {
         return ""
-            + ToString (_single_function_)
         ;
     }
 
     internal override void RemoveChild(Node child)
     {
-        if ( _single_function_ == child )
-        {
-            _single_function_ = null;
-            return;
-        }
     }
 
     internal override void ReplaceChild(Node oldChild, Node newChild)
     {
-        if ( _single_function_ == oldChild )
-        {
-            SetSingleFunction ((PSingleFunction) newChild);
-            return;
-        }
     }
 
 }

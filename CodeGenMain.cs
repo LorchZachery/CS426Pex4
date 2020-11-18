@@ -4,10 +4,10 @@ using System;
 using System.Collections;
 using System.Text;
 using System.IO;
-using ToyLanguage.parser;
-using ToyLanguage.analysis;
-using ToyLanguage.lexer;
-using ToyLanguage.node;
+using CS426.parser;
+using CS426.analysis;
+using CS426.lexer;
+using CS426.node;
 
 class TextPrinter : ReversedDepthFirstAdapter {
   enum codes {
@@ -146,7 +146,8 @@ class TestParser
         //CodeGenerator cg = new CodeGenerator(Console.Out);
         s.Apply(cg);
 
-        //Console.ReadLine();
+        //comment out later
+       // Console.ReadLine();
 
   }
 }

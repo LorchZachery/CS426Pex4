@@ -646,10 +646,6 @@ public class DepthFirstAdapter : AnalysisAdapter
     public override void CaseASingleConstants(ASingleConstants node)
     {
         InASingleConstants(node);
-        if(node.GetSingleConstant() != null)
-        {
-            node.GetSingleConstant().Apply(this);
-        }
         OutASingleConstants(node);
     }
     public virtual void InAStrSingleConstant(AStrSingleConstant node)
@@ -766,10 +762,6 @@ public class DepthFirstAdapter : AnalysisAdapter
     public override void CaseASingleFunctions(ASingleFunctions node)
     {
         InASingleFunctions(node);
-        if(node.GetSingleFunction() != null)
-        {
-            node.GetSingleFunction().Apply(this);
-        }
         OutASingleFunctions(node);
     }
     public virtual void InAParamsSingleFunction(AParamsSingleFunction node)
@@ -2144,10 +2136,6 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
     public override void CaseASingleConstants(ASingleConstants node)
     {
         InASingleConstants(node);
-        if(node.GetSingleConstant() != null)
-        {
-            node.GetSingleConstant().Apply(this);
-        }
         OutASingleConstants(node);
     }
     public virtual void InAStrSingleConstant(AStrSingleConstant node)
@@ -2264,10 +2252,6 @@ public class ReversedDepthFirstAdapter : AnalysisAdapter
     public override void CaseASingleFunctions(ASingleFunctions node)
     {
         InASingleFunctions(node);
-        if(node.GetSingleFunction() != null)
-        {
-            node.GetSingleFunction().Apply(this);
-        }
         OutASingleFunctions(node);
     }
     public virtual void InAParamsSingleFunction(AParamsSingleFunction node)

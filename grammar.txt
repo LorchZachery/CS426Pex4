@@ -84,11 +84,11 @@ Ignored Tokens
 Productions
 	program = constants functions main_function;
 	
-	constants = {mult} single_constant constants | {single} single_constant;
+	constants = {mult} single_constant constants | {single} ;
 	single_constant = {str} constant [type]: id [var]: id assign string eol | {expr} constant [type]: id [var]: id assign or_expr eol;
 	//types = {str} string | {expr} or_expr;
 	
-	functions = {multiple} single_function functions | {single} single_function;
+	functions = {multiple} single_function functions | {single} ;
 	single_function = {params} id lparen params rparen lbrace statements rbrace | {no_params} id lparen rparen lbrace statements rbrace;
 	params = {multiple} [type]: id [var]: id comma params | {single} [type]: id [var]: id;
 	//param = [type]: id [var]: id;
@@ -127,7 +127,7 @@ Productions
 	
 	parenthetical = {prio} lparen or_expr rparen | {pass} operand;
 	
-	operand = {int} int | {float} float | {var} id;
+	operand = {int} int | {float} float | {var} id ;
 	
 	
 	
