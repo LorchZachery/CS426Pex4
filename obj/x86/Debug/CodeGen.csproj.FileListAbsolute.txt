@@ -21,3 +21,9 @@ C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\CodeGen.csprojAssemblyRefer
 C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\CodeGen.csproj.CoreCompileInputs.cache
 C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\ConsoleApplication.exe
 C:\Users\Cadet_Admin\Desktop\CS426Pex4\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\C21Jonathan.Nash\Documents\Comp_Sci\426\CS426Pex4\bin\Debug\ConsoleApplication.exe
+C:\Users\C21Jonathan.Nash\Documents\Comp_Sci\426\CS426Pex4\bin\Debug\ConsoleApplication.pdb
+C:\Users\C21Jonathan.Nash\Documents\Comp_Sci\426\CS426Pex4\obj\x86\Debug\CodeGen.csprojAssemblyReference.cache
+C:\Users\C21Jonathan.Nash\Documents\Comp_Sci\426\CS426Pex4\obj\x86\Debug\CodeGen.csproj.CoreCompileInputs.cache
+C:\Users\C21Jonathan.Nash\Documents\Comp_Sci\426\CS426Pex4\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\C21Jonathan.Nash\Documents\Comp_Sci\426\CS426Pex4\obj\x86\Debug\ConsoleApplication.pdb

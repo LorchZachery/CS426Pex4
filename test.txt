@@ -2,16 +2,17 @@
 main() {
 	
 	
-	if( 5 less than 10){
-		Print(Quote: in if outside`) end
-		if( 5 less than 10){
-		Print(Quote: in if inside`) end
+	if( 5 less than 10){ COMMENT: 0/1 assign f/t
+		Print(Quote: in if outside`) end COMMENT: 2 if t, else 0->3
+	 	if( 5 less than 10){ COMMENT: 4/5
+	 	Print(Quote: in if inside`) end COMMENT: 6 if true, else 7
 		
 		}
+		COMMENT: '7'
 		}
 		
 	
-	
+	COMMENT: 3
 	Print(Quote: made it out`) end
 	
 	

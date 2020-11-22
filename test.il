@@ -9,33 +9,35 @@
 {
 	.maxstack 128
 	.entrypoint
+L0:
 	ldc.i4 5
 	ldc.i4 10
-	blt L3
+	blt L1
 	ldc.i4 0
 	br L2
-L3:
+L1:
 	ldc.i4 1
 L2:
 	ldc.i4 0
-	beq L1
-	 ldstr "Quote: in if outside`"
+	beq L3
+	ldstr "Quote: in if outside`"
 	call void [mscorlib]System.Console::Write(string)
+L4:
 	ldc.i4 5
 	ldc.i4 10
-	blt L6
+	blt L5
 	ldc.i4 0
-	br L5
-L6:
-	ldc.i4 1
+	br L6
 L5:
+	ldc.i4 1
+L6:
 	ldc.i4 0
-	beq L4
-	 ldstr "Quote: in if inside`"
+	beq L7
+	ldstr "Quote: in if inside`"
 	call void [mscorlib]System.Console::Write(string)
-	br L4
-L4:
-	 ldstr "Quote: made it out`"
+	br L7
+L8:
+	ldstr "Quote: made it out`"
 	call void [mscorlib]System.Console::Write(string)
 	ret
 }
