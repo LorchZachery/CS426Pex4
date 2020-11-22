@@ -9,21 +9,34 @@
 {
 	.maxstack 128
 	.entrypoint
-	.locals init(int32 z)
-	ldc.i4 3
-	stloc z
-	.locals init(float32 x)
-	ldc.r4 5.6e2
-	stloc x
-	.locals init(float32 y)
-	ldloc x
-	stloc y
-	.locals init(int32 w)
+	ldc.i4 5
+	ldc.i4 10
+	blt L3
+	ldc.i4 0
+	br L2
+L3:
 	ldc.i4 1
-	not
-	stloc w
-	ldloc w
-	call void [mscorlib]System.Console::Write(int32)
+L2:
+	ldc.i4 0
+	beq L1
+	 ldstr "Quote: in if outside`"
+	call void [mscorlib]System.Console::Write(string)
+	ldc.i4 5
+	ldc.i4 10
+	blt L6
+	ldc.i4 0
+	br L5
+L6:
+	ldc.i4 1
+L5:
+	ldc.i4 0
+	beq L4
+	 ldstr "Quote: in if inside`"
+	call void [mscorlib]System.Console::Write(string)
+	br L4
+L4:
+	 ldstr "Quote: made it out`"
+	call void [mscorlib]System.Console::Write(string)
 	ret
 }
 }

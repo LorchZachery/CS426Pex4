@@ -1,15 +1,36 @@
 ﻿
 main() {
-	int z end
-	z equals 3 end
-	float x end
-	x equals 5.6e2 end
-	float y end
-	y equals x end
 	
-	int w end
-	w equals not 1 end
-	PrintInt(w) end
+	
+	if( 5 less than 10){
+		Print(Quote: in if outside`) end
+		if( 5 less than 10){
+		Print(Quote: in if inside`) end
+		
+		}
+		}
+		
+	
+	
+	Print(Quote: made it out`) end
+	
+	
+	
+	
+	COMMENT: int z end
+	COMMENT: z equals 3 end
+	COMMENT: float x end
+	COMMENT: x equals 5.6e2 end
+	COMMENT: float y end
+	COMMENT: y equals x end
+	
+	COMMENT: int w end
+	COMMENT: w equals 5 times 4 minus 1 end
+	COMMENT: PrintInt(w) end
+	COMMENT: NewLine() end
+	COMMENT: 
+	COMMENT: w equals 5 times (4  minus 1) divide 3 end
+	COMMENT: PrintInt(w) end
 	
 	
 	

@@ -11,6 +11,11 @@ namespace CS426.analysis
     {
         StreamWriter _output;
         //TextWriter _output;
+        int labelCount = 0;
+        int oldLabelCount = 0;
+        bool inElse = false;
+        int elseBreak = 0;
+        bool outIfState = false;
         public CodeGenerator(StreamWriter fileio)
         {
             _output = fileio;
@@ -187,11 +192,159 @@ namespace CS426.analysis
 
         //x divide 5 -------ldloc x
         //                  ldc.i4 5
-        //                  div
+        //                  divtatement node)
         public override void OutADivMultDiv(ADivMultDiv node)
         {
             _output.WriteLine("\tdiv");
         }
+
+
+        public override void CaseAIfStatement(AIfStatement node)
+        {
+            bool toplevel = false;
+            if (!outIfState)
+            {
+                outIfState = true;
+                toplevel = true;
+            }
+            InAIfStatement(node);
+            if (node.GetIf() != null)
+            {
+                node.GetIf().Apply(this);
+            }
+            if (node.GetLparen() != null)
+            {
+                node.GetLparen().Apply(this);
+            }
+            int saveCount = labelCount +1 ;
+            labelCount += 3;
+            if (node.GetOrExpr() != null)
+            {
+                node.GetOrExpr().Apply(this);
+            }
+            if (node.GetRparen() != null)
+            {
+                node.GetRparen().Apply(this);
+            }
+            if (node.GetLbrace() != null)
+            {
+                node.GetLbrace().Apply(this);
+            }
+            _output.WriteLine("\tldc.i4 0");
+            _output.WriteLine("\tbr L" + (labelCount-1).ToString());
+            _output.WriteLine("L" + labelCount.ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+            _output.WriteLine("L" + (labelCount -1).ToString() + ":");
+            _output.WriteLine("\tldc.i4 0");
+            _output.WriteLine("\tbeq L" + saveCount.ToString());
+
+            if (node.GetStatements() != null)
+            {
+                node.GetStatements().Apply(this);
+            }
+            if (!toplevel)
+            {
+                _output.WriteLine("\tbr L" + saveCount.ToString());
+            }
+           if (inElse && toplevel)
+           {
+                _output.WriteLine("L" + saveCount.ToString() + ":");
+            }
+           else if (toplevel)
+            {
+                _output.WriteLine("L" + (labelCount-2).ToString() + ":");
+            }
+            
+            if (node.GetRbrace() != null)
+            {
+                node.GetRbrace().Apply(this);
+            }
+
+            
+            OutAIfStatement(node);
+        }
+
+        
+
+        public override void CaseAElseStatement(AElseStatement node)
+        {
+            inElse = true; 
+            InAElseStatement(node);
+            
+            if (node.GetIfStatement() != null)
+            {
+                node.GetIfStatement().Apply(this);
+            }
+           
+            if (node.GetElse() != null)
+            {
+                node.GetElse().Apply(this);
+            }
+            if (node.GetLbrace() != null)
+            {
+                node.GetLbrace().Apply(this);
+            }
+
+            if (node.GetStatements() != null)
+            {
+                node.GetStatements().Apply(this);
+            }
+            
+            _output.WriteLine("L" + (labelCount -2).ToString() + ":");
+            if (node.GetRbrace() != null)
+            {
+                node.GetRbrace().Apply(this);
+            }
+
+            inElse = false;
+            
+
+            OutAElseStatement(node);
+        }
+
+       
+
+        public override void OutALtCompareExpr(ALtCompareExpr node)
+        {
+            _output.WriteLine("\tblt L" + (labelCount).ToString());
+           
+        }
+
+        /*
+        public override void InAIfStatement(AIfStatement node)
+        {
+            //setting label to of statement
+            _output.WriteLine("L" + labelCount.ToString() +":");
+            labelCount++;
+        }
+        public override void OutAIfStatement(AIfStatement node)
+        {
+           //setting label of else of just rest of function
+            _output.WriteLine("L" + labelCount.ToString() + ":");
+        }
+
+        //less than expression 
+        public override void OutALtCompareExpr(ALtCompareExpr node)
+        {
+            _output.WriteLine("\tblt L" + labelCount.ToString());
+            _output.WriteLine("\tldc.i4 0");
+            labelCount++;
+            _output.WriteLine("\tbr L" + labelCount.ToString());
+            _output.WriteLine("L" + (labelCount -1).ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+            _output.WriteLine("\tldc.i4 0");
+            labelCount++;
+            _output.WriteLine("\tbeq L" + labelCount.ToString());
+        }
+
+        public override void OutAElseStatement(AElseStatement node)
+        {
+           
+            _output.WriteLine("L" + labelCount.ToString() + ":");
+        }
+        */
+
+
     }
 }
 /*
