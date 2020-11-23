@@ -19,6 +19,8 @@
 	call void [mscorlib]System.Console::Write(int32)
 	ret
 }
+.class OuterClass
+{
 .method static void main() cil managed
 {
 	.maxstack 128
@@ -33,4 +35,5 @@
 	 call void function2()
 	 call void function1()
 	ret
+}
 }

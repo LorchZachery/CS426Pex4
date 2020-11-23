@@ -49,7 +49,8 @@ namespace CS426.analysis
         }
         public override void InAMainFunction(AMainFunction node)
         {
-            
+             _output.WriteLine(".class OuterClass");
+             _output.WriteLine("{");
             _output.WriteLine(".method static void main() cil managed");
             _output.WriteLine("{");
             _output.WriteLine("\t.maxstack 128");
@@ -63,6 +64,7 @@ namespace CS426.analysis
         public override void OutAMainFunction(AMainFunction node)
         {
             _output.WriteLine("\tret");
+            _output.WriteLine("}");
             _output.WriteLine("}");
 
         }
