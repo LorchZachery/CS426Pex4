@@ -203,20 +203,7 @@ namespace CS426.analysis
 
         public override void InAIfStatement(AIfStatement node)
         {
-            if (!usedLs.Contains(labelCount) && labelCount != saveLabel)
-            {
-                _output.WriteLine("L" + labelCount + ":");
-                usedLs.Add(labelCount);
-                labelCount++;
-            }
-            else
-            {
-                labelCount++;
-                _output.WriteLine("L" + labelCount + ":");
-                usedLs.Add(labelCount);
-                labelCount++;
-            }
-
+            
 
 
     //        _output.WriteLine("\tldc.i4 0");
@@ -231,12 +218,19 @@ namespace CS426.analysis
 
         public override void CaseAIfStatement(AIfStatement node)
         {
-            bool toplevel = false;
-            if (!outIfState)
+            bool elseHappend = false; 
+            if (inElse)
             {
-                outIfState = true;
-                toplevel = true;
+                inElse = false;
+                elseHappend = true;
             }
+            int saveCount = labelCount;
+            labelCount += 4;
+          
+            _output.WriteLine("\tbr L" + (saveCount +1).ToString());
+            _output.WriteLine("L" + (saveCount + 3).ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+            _output.WriteLine("\tbr L" + (saveCount).ToString());
             InAIfStatement(node);
             if (node.GetIf() != null)
             {
@@ -246,117 +240,60 @@ namespace CS426.analysis
             {
                 node.GetLparen().Apply(this);
             }
-            int saveCount = labelCount +1 ;
-           // labelCount += 2;
-            if (node.GetOrExpr() != null)
-            {
-                node.GetOrExpr().Apply(this);
-            }
-            if (node.GetRparen() != null)
-            {
-                node.GetRparen().Apply(this);
-            }
-            if (node.GetLbrace() != null)
-            {
-                node.GetLbrace().Apply(this);
-            }
-            if (!usedLs.Contains(labelCount))
-            {
-                _output.WriteLine("\tldc.i4 0");
-                _output.WriteLine("\tbr L" + (labelCount).ToString());
-                _output.WriteLine("L" + (labelCount - 1).ToString() + ":");
-                _output.WriteLine("\tldc.i4 1");
-                _output.WriteLine("L" + (labelCount).ToString() + ":");
-                _output.WriteLine("\tldc.i4 0");
-                usedLs.Add(labelCount);
-                labelCount++;
-                _output.WriteLine("\tbeq L" + (labelCount).ToString());
-                saveLabel = labelCount;
-                savedLabels.Add(saveLabel);
-                //usedLs.Add(labelCount);
-               // labelCount++;
-            }
-            else
-            {
-                labelCount++;
-                _output.WriteLine("\tldc.i4 0");
-                _output.WriteLine("\tbr L" + (labelCount).ToString());
-                _output.WriteLine("L" + labelCount.ToString() + ":");
-                _output.WriteLine("\tldc.i4 1");
-                _output.WriteLine("L" + (labelCount).ToString() + ":");
-                _output.WriteLine("\tldc.i4 0");
-                _output.WriteLine("\tbeq L" + labelCount.ToString());
-                //usedLs.Add(labelCount);
-                //labelCount++;
-            }
+
+            _output.WriteLine("L" + (saveCount).ToString() + ":");
+            _output.WriteLine("\tldc.i4 0");
+           
+             _output.WriteLine("\tbeq L" + (saveCount + 2).ToString());
             
 
             if (node.GetStatements() != null)
             {
                 node.GetStatements().Apply(this);
             }
-            if (!toplevel)
-            {
-                if(!usedLs.Contains(labelCount))
-                {
-                    // _output.WriteLine("\tbr L" + saveCount.ToString());
-                    _output.WriteLine("\tbr L" + labelCount.ToString());
-                    usedLs.Add(labelCount);
-                    labelCount++;
-                }
-                else
-                {
-                    labelCount++;
-                    // _output.WriteLine("\tbr L" + saveCount.ToString());
-                    _output.WriteLine("\tbr L" + labelCount.ToString());
-                    usedLs.Add(labelCount);
-                    labelCount++;
-                }
-                
-            }
-           if (inElse && toplevel)
-           {
-                if (!usedLs.Contains(labelCount))
-                {
-                    // _output.WriteLine("\tbr L" + saveCount.ToString());
-                    _output.WriteLine("L" + labelCount.ToString() + ":");
-                    usedLs.Add(labelCount);
-                    labelCount++;
-                }
-                else
-                {
-                    labelCount++;
-                    // _output.WriteLine("\tbr L" + saveCount.ToString());
-                    _output.WriteLine("L" + labelCount.ToString() + ":");
-                    usedLs.Add(labelCount);
-                    labelCount++;
-                }
-          
-            }
-           else if (toplevel)
-            {
-                if (!usedLs.Contains(labelCount))
-                {
-                    _output.WriteLine("L" + (labelCount).ToString() + ":"); //savedLabels
 
-                    usedLs.Add(labelCount);
-                    labelCount++;
-                }
-                else
-                {
-                    labelCount++;
-                    _output.WriteLine("L" + (labelCount).ToString() + ":");
-                    usedLs.Add(labelCount);
-                    labelCount++;
-                }
-                
+            if (elseHappend)
+            {
+                _output.WriteLine("\tbr L" + (saveCount -1).ToString());
+            }
+            else
+            {
+                _output.WriteLine("\tbr L" + (saveCount + 2).ToString());
             }
            
+            _output.WriteLine("L" + (saveCount + 1).ToString() + ":");
+           
+            if (node.GetOrExpr() != null)
+            {
+                labelCount =saveCount + 3;
+                node.GetOrExpr().Apply(this);
+                labelCount++;
+            }
+            _output.WriteLine("\tldc.i4 0");
+
+            _output.WriteLine("\tbr L" + (saveCount).ToString());
+            
+            _output.WriteLine("L" + (saveCount +2).ToString() + ":");
+
+            if (node.GetRparen() != null)
+            {
+                node.GetRparen().Apply(this);
+
+            }
+
+            
+            if (node.GetLbrace() != null)
+            {
+                node.GetLbrace().Apply(this);
+            }
+
+            
+
             if (node.GetRbrace() != null)
             {
                 node.GetRbrace().Apply(this);
             }
-
+             
             
             OutAIfStatement(node);
         }
@@ -365,12 +302,15 @@ namespace CS426.analysis
 
         public override void CaseAElseStatement(AElseStatement node)
         {
-            inElse = true; 
+            int saveCount = labelCount;
+            labelCount += 1;
             InAElseStatement(node);
+            inElse = true;
             
             if (node.GetIfStatement() != null)
             {
                 node.GetIfStatement().Apply(this);
+               
             }
            
             if (node.GetElse() != null)
@@ -382,33 +322,18 @@ namespace CS426.analysis
                 node.GetLbrace().Apply(this);
             }
 
+           
             if (node.GetStatements() != null)
             {
                 node.GetStatements().Apply(this);
             }
+            _output.WriteLine("L" + saveCount.ToString() + ":");
 
-            if (!usedLs.Contains(labelCount))
-            {
-                _output.WriteLine("L" + (labelCount).ToString() + ":");
-                usedLs.Add(labelCount);
-                labelCount++;
-            }
-            else
-            {
-                labelCount++;
-                _output.WriteLine("L" + (labelCount).ToString() + ":");
-                usedLs.Add(labelCount);
-                labelCount++;
-            }
-            
+
             if (node.GetRbrace() != null)
             {
                 node.GetRbrace().Apply(this);
             }
-
-            inElse = false;
-            
-
             OutAElseStatement(node);
         }
 
@@ -565,20 +490,9 @@ namespace CS426.analysis
 
         public override void OutALtCompareExpr(ALtCompareExpr node)
         {
-            if (!usedLs.Contains(labelCount))
-            {
-                _output.WriteLine("\tblt L" + (labelCount).ToString());
-                usedLs.Add(labelCount);
-                labelCount++;
-            }
-            else
-            {
-                labelCount++;
-                _output.WriteLine("\tblt L" + (labelCount).ToString());
-                usedLs.Add(labelCount);
-                labelCount++;
-            }
-            
+                      
+        _output.WriteLine("\tblt L" + (labelCount).ToString());
+          
            
         }
 
