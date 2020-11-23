@@ -2,9 +2,34 @@
 main() {
 	
 	
-	if( ((10 less than 3)  and (2 less than 3))){
-		PrintInt(5) end
+	if((3 less than 10) and( 3 less than 10)){
+		PrintInt(1) end
+		if(3 less than 10){
+		PrintInt(2) end
 	}
+	}else{
+		PrintInt(3) end
+	}
+	
+	
+	
+	
+	
+	
+	COMMENT: if( (3 less than 10) and (3 less than 10) and (3 less than 10)){
+	COMMENT: 	PrintInt(4) end
+	COMMENT: 	if( (3 less than 10)){
+	COMMENT: 		PrintInt(5) end
+	COMMENT: 	}
+	COMMENT: }
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	COMMENT: int x end
