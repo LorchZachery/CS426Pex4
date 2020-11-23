@@ -2,24 +2,62 @@
 main() {
 	
 	
-	if( 5 less than 10){ 
-		Print(Quote: in if outside`) end 
-		if( 10 less than 10){ 
-		Print(Quote: in if inside`) end 
-		}
-		else{
-			Print(Quote: HELL`) end
-		}
-		if(22 less than 20){
-			Print(Quote: f this`) end
-		}
-	}
-	else{
-		Print(Quote: in else`) end
+	if( ((10 less than 3)  and (2 less than 3))){
+		PrintInt(5) end
 	}
 	
 	
-	Print(Quote: made it out`) end
+	COMMENT: int x end
+	COMMENT: x equals 0 end
+	COMMENT: 
+	COMMENT: int z end
+	COMMENT: z equals 0 end
+	COMMENT: 
+	COMMENT: while( x less than 3){
+	COMMENT: 	Print(Quote: jon`) end
+	COMMENT: 	NewLine() end
+	COMMENT: 	x equals x plus 1 end
+	COMMENT: 	while( z less than 2){
+	COMMENT: 		Print(Quote: in z`) end
+	COMMENT: 		NewLine() end
+	COMMENT: 		z equals z plus 1 end
+	COMMENT: 		if(z less than 2){ 
+	COMMENT: 			Print(Quote: in if inside`) end
+	COMMENT: 			NewLine() end
+	COMMENT: 			if(5 less than 10){
+	COMMENT: 				Print(Quote: FUUUU`) end
+	COMMENT: 				NewLine() end
+	COMMENT: 			}
+	COMMENT: 		}
+	COMMENT: 		else{
+	COMMENT: 			Print(Quote: in else inside`) end
+	COMMENT: 			NewLine() end
+	COMMENT: 		}
+	COMMENT: 	}
+	COMMENT: 	z equals 0 end
+	COMMENT: }
+	COMMENT: Print(Quote: out`) end
+	
+	
+	
+	COMMENT: if( 5 less than 10){ 
+	COMMENT: 	Print(Quote: in if outside`) end 
+	COMMENT: 	if( 10 less than 10){ 
+	COMMENT: 	Print(Quote: in if inside`) end 
+	COMMENT: 	}
+	COMMENT: 	else{
+	COMMENT: 		Print(Quote: HELL`) end
+	COMMENT: 	}
+	COMMENT: 	if(22 less than 20){
+	COMMENT: 		Print(Quote: f this`) end
+	COMMENT: 	}
+	COMMENT: }
+	COMMENT: else{
+	COMMENT: 	Print(Quote: in else`) end
+	COMMENT: }
+	COMMENT: 
+	COMMENT: 
+	COMMENT: Print(Quote: made it out`) end
 	
 	
 	
