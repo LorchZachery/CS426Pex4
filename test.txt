@@ -1,15 +1,77 @@
 ﻿
+
+function1(){
+	PrintInt(1) end
+	NewLine() end
+}
+
+function2(){
+	PrintInt(3) end
+}
+
 main() {
+	PrintInt(0) end
+	NewLine() end
+	function1() end
+	PrintInt(2) end
+	function2() end
+	function1() end
+	
+	COMMENT: if( 3 same as 3){
+	COMMENT: 	PrintInt(5) end
+	COMMENT: 	
+	COMMENT: }
+	COMMENT: 
+	COMMENT: if( 4 greater than 3){
+	COMMENT: 	PrintInt(5) end
+	COMMENT: 	
+	COMMENT: }
+	COMMENT: 
+	COMMENT: 
+	COMMENT: if( 3 greater or equal to 3){
+	COMMENT: 	PrintInt(5) end
+	COMMENT: 	
+	COMMENT: }
 	
 	
-	if((3 less than 10) and( 3 less than 10)){
-		PrintInt(1) end
-		if(3 less than 10){
-		PrintInt(2) end
-	}
-	}else{
-		PrintInt(3) end
-	}
+	COMMENT: if( 3 less or equal to 3){
+	COMMENT: 	PrintInt(5) end
+	COMMENT: 	
+	COMMENT: }
+	
+	
+	
+	
+    COMMENT: int x end
+	COMMENT: x equals 0 end
+	COMMENT: 
+	COMMENT: int z end 
+	COMMENT: z equals 0 end
+	COMMENT: 
+	COMMENT: int y end
+	COMMENT: y equals 0 end
+	COMMENT: 
+	COMMENT: while( (y less than 2) and (x less than 3)){
+	COMMENT: 	PrintInt(1) end
+	COMMENT: 	x equals x plus 1 end
+	COMMENT: 	y equals y plus 1 end
+	COMMENT: 	while(z less than 3){
+	COMMENT: 		PrintInt(2) end
+	COMMENT: 		z equals z plus 1 end
+	COMMENT: 	}
+	COMMENT: 	z equals 0 end
+	COMMENT: }
+	
+	
+	
+	  COMMENT: if( not (3 less than 10) and( 3 less than 10)){
+	  COMMENT: 	PrintInt(1) end
+	  COMMENT: 	if(3 less than 10){
+	  COMMENT: 	PrintInt(2) end
+	  COMMENT: }
+	  COMMENT: }else{
+	  COMMENT: 	PrintInt(3) end
+	  COMMENT: }
 	
 	
 	
@@ -17,10 +79,16 @@ main() {
 	
 	
 	COMMENT: if( (3 less than 10) and (3 less than 10) and (3 less than 10)){
-	COMMENT: 	PrintInt(4) end
-	COMMENT: 	if( (3 less than 10)){
-	COMMENT: 		PrintInt(5) end
-	COMMENT: 	}
+	COMMENT: PrintInt(4) end
+	COMMENT: if( (3 less than 10)){
+	COMMENT: 	PrintInt(5) end
+	COMMENT: }
+	COMMENT: else{
+	COMMENT: 	PrintInt(2) end
+	COMMENT: }
+	COMMENT: }
+	COMMENT:  else{
+	COMMENT: 	PrintInt(3) end
 	COMMENT: }
 	
 	
@@ -38,10 +106,15 @@ main() {
 	COMMENT: int z end
 	COMMENT: z equals 0 end
 	COMMENT: 
-	COMMENT: while( x less than 3){
+	COMMENT: int test end
+	COMMENT: test equals 0 end
+	COMMENT: 
+	COMMENT: 
+	COMMENT: while( (x less than 3) and (test less than 2)){
 	COMMENT: 	Print(Quote: jon`) end
 	COMMENT: 	NewLine() end
 	COMMENT: 	x equals x plus 1 end
+	COMMENT: 	test equals test plus 1 end
 	COMMENT: 	while( z less than 2){
 	COMMENT: 		Print(Quote: in z`) end
 	COMMENT: 		NewLine() end
@@ -50,7 +123,7 @@ main() {
 	COMMENT: 			Print(Quote: in if inside`) end
 	COMMENT: 			NewLine() end
 	COMMENT: 			if(5 less than 10){
-	COMMENT: 				Print(Quote: FUUUU`) end
+	COMMENT: 				Print(Quote: super deep`) end
 	COMMENT: 				NewLine() end
 	COMMENT: 			}
 	COMMENT: 		}

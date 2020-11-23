@@ -12,13 +12,12 @@ namespace CS426.analysis
         StreamWriter _output;
         //TextWriter _output;
         int labelCount = 0;
-        int oldLabelCount = 0;
+        int returnCount = 0;
         bool inElse = false;
-        int elseBreak = 0;
-        bool outIfState = false;
-        int saveLabel = -1;
-        List<int> savedLabels = new List<int>();
-        List<int> usedLs = new List<int>();
+        int returnFunction; 
+
+
+        
         public CodeGenerator(StreamWriter fileio)
         {
             _output = fileio;
@@ -32,6 +31,7 @@ namespace CS426.analysis
         //}
         //.class OuterClass
         //.method static void main() cil managed
+
         public override void InAProgram(AProgram node)
         {
             _output.WriteLine(".assembly extern mscorlib {}");
@@ -39,24 +39,35 @@ namespace CS426.analysis
             _output.WriteLine("{");
             _output.WriteLine("\t.ver 1:0:1:0");
             _output.WriteLine("}");
-            _output.WriteLine(".class OuterClass");
-            _output.WriteLine("{");
+           // _output.WriteLine(".class OuterClass");
+          //  _output.WriteLine("{");
+        }
+        public override void OutAProgram(AProgram node)
+        {
+           // _output.WriteLine("}");
+            _output.Close();
+        }
+        public override void InAMainFunction(AMainFunction node)
+        {
+            
             _output.WriteLine(".method static void main() cil managed");
             _output.WriteLine("{");
             _output.WriteLine("\t.maxstack 128");
             _output.WriteLine("\t.entrypoint");
+           
         }
 
         //ending the assemble file
         //  ret
         //}
-        public override void OutAProgram(AProgram node)
+        public override void OutAMainFunction(AMainFunction node)
         {
             _output.WriteLine("\tret");
             _output.WriteLine("}");
-            _output.WriteLine("}");
-            _output.Close();
+
         }
+
+        
 
         //int x end
         //float x end
@@ -133,12 +144,21 @@ namespace CS426.analysis
             _output.WriteLine("\tand");
         }
 
+        public override void OutAOrOrExpr(AOrOrExpr node)
+        {
+            _output.WriteLine("\tor");
+        }
+
 
         //adding literal for string param
         public override void OutAStringArgs(AStringArgs node)
         {
            _output.WriteLine("\tldstr " + "\"" +  node.GetString().Text + "\"" );
         }
+
+
+       
+
 
         // PrintInt(9) end PrintFloat(3.4) end  Print("hello world") end NewLine() emd
         public override void OutAParamsFunctionCall(AParamsFunctionCall node)
@@ -157,10 +177,7 @@ namespace CS426.analysis
                 
                 _output.WriteLine("\tcall void [mscorlib]System.Console::Write(string)");
             }
-            else
-            {
-                //other functions
-            }
+            
         }
         public override void OutANoParamsFunctionCall(ANoParamsFunctionCall node)
         {
@@ -172,9 +189,30 @@ namespace CS426.analysis
             }
             else
             {
+                _output.WriteLine("\t call void " + node.GetId().Text + "()");
+                //_output.WriteLine("\tbr " + node.GetId().Text);
+                //_output.WriteLine("R" + returnCount.ToString() + ":");
+                //returnFunction = returnCount;
+                //returnCount++;
                 //other functs
             }
         }
+
+        public override void InANoParamsSingleFunction(ANoParamsSingleFunction node)
+        {
+            _output.WriteLine(".method public static void " +  node.GetId().Text + "() " + "cil managed");
+            _output.WriteLine("{");
+            _output.WriteLine("\t.maxstack 128");
+        }
+
+        public override void OutANoParamsSingleFunction(ANoParamsSingleFunction node)
+        {
+
+            _output.WriteLine("\tret");
+            _output.WriteLine("}");
+
+        }
+
 
         // x plus 5   ------   ldloc x
         //                  ldc.i4 5
@@ -216,15 +254,15 @@ namespace CS426.analysis
         public override void CaseAIfStatement(AIfStatement node)
         {
             bool elseHappened = false;
-            // if (inElse)
-            // {
-            //     inElse = false;
-            //     elseHappened = true;
-            // }
-            //labelCount += 3;
+            if (inElse)
+            {
+                elseHappened = true;
+                inElse = false;
+            }
+           
             int saveCount = labelCount + 3;
            
-            //labelCount += 1;
+           
            
             InAIfStatement(node);
             if (node.GetIf() != null)
@@ -243,8 +281,7 @@ namespace CS426.analysis
                 node.GetOrExpr().Apply(this);
 
             }
-            //_output.WriteLine("L" + (labelCount).ToString() + ":");
-            //labelCount++;
+           
             _output.WriteLine("\tldc.i4 0");
             _output.WriteLine("\tbeq L" + (labelCount).ToString());
             saveCount = labelCount; 
@@ -264,46 +301,46 @@ namespace CS426.analysis
             {
                 node.GetStatements().Apply(this);
             }
-            _output.WriteLine("\tbr L" + (labelCount).ToString()); //check
+
+            if (elseHappened)
+            {
+                _output.WriteLine("\tbr L" + (labelCount).ToString()); //check
+            }
            
             _output.WriteLine("L" + (saveCount).ToString() + ":");
-            
+
+            //if (!elseHappened)
+            //{
+            //    _output.WriteLine("L" + labelCount.ToString() + ":");
+            //}
+            //
             if (node.GetRbrace() != null)
             {
                 node.GetRbrace().Apply(this);
             }
-          // labelCount++;
+         
             
             OutAIfStatement(node);
-           // _output.WriteLine("L" + (saveCount+1).ToString() + ":");
+          
         }
-        //public override void OutACondLoc(ACondLoc node)
-        //{
-        //    _output.WriteLine("L" + (labelCount).ToString() + ":");
-        //    labelCount++;
-        //
-        //}
 
-        public override void OutALtCompareExpr(ALtCompareExpr node)
+        public override void OutACondLoc(ACondLoc node)
         {
-
-            _output.WriteLine("\tblt L" + (labelCount).ToString());
-            _output.WriteLine("\tldc.i4 0");
-            labelCount++;
-            _output.WriteLine("\tbr L" + (labelCount).ToString());
-            _output.WriteLine("L" + (labelCount-1).ToString() + ":");
-            _output.WriteLine("\tldc.i4 1");
-            //labelCount++;
-            _output.WriteLine("L" + (labelCount).ToString() + ":");
-            labelCount++;
+           
+            
         }
+
+
+
+
+
 
         public override void CaseAElseStatement(AElseStatement node)
         {
-            inElse = true;
+         
             InAElseStatement(node);
+            inElse = true;
            // labelCount++;
-            int saveCount = labelCount; 
             if (node.GetIfStatement() != null)
             {
                 node.GetIfStatement().Apply(this);
@@ -323,15 +360,16 @@ namespace CS426.analysis
             {
                 node.GetStatements().Apply(this);
             }
-            _output.WriteLine("L" + labelCount.ToString() + ":");
-            inElse = false;
+         
+            _output.WriteLine("L" + (labelCount).ToString() + ":");
+            labelCount++;
 
             if (node.GetRbrace() != null)
             {
                 node.GetRbrace().Apply(this);
             }
             OutAElseStatement(node);
-          //  _output.WriteLine("L" + labelCount.ToString() + ":");
+          
         }
 
 
@@ -340,9 +378,9 @@ namespace CS426.analysis
         public override void CaseAWhileStatment(AWhileStatment node)
         {
             int saveCount = labelCount;
-            labelCount += 3;
-            _output.WriteLine("L" + saveCount.ToString() + ":");
-
+            labelCount++;
+            _output.WriteLine("L" + labelCount.ToString() + ":");
+            labelCount++;
             InAWhileStatment(node);
             if (node.GetWhile() != null)
             {
@@ -355,18 +393,11 @@ namespace CS426.analysis
             
             if (node.GetOrExpr() != null)
             {
-                labelCount = saveCount + 1;
+                
                 node.GetOrExpr().Apply(this);
-                labelCount +=3;
+                
             }
-            _output.WriteLine("\tldc.i4 0");
-            _output.WriteLine("\tbr L" + (saveCount +2).ToString());
-            _output.WriteLine("L" + (saveCount+1).ToString() + ":");
-            _output.WriteLine("\tldc.i4 1");
-            _output.WriteLine("L" + (saveCount +2).ToString() + ":");
-            _output.WriteLine("\tldc.i4 0");
-            _output.WriteLine("\tbeq L" + (saveCount+3).ToString());
-
+            
 
             if (node.GetRparen() != null)
             {
@@ -376,58 +407,95 @@ namespace CS426.analysis
             {
                 node.GetLbrace().Apply(this);
             }
-           
 
 
+            _output.WriteLine("\tldc.i4 0");
+            _output.WriteLine("\tbeq L" + saveCount.ToString());
             if (node.GetStatements() != null)
             {
                 node.GetStatements().Apply(this);
             }
-            _output.WriteLine("\tbr L" + saveCount.ToString());
+            _output.WriteLine("\tbr L" + (saveCount + 1).ToString()); 
             if (node.GetRbrace() != null)
             {
                 node.GetRbrace().Apply(this);
             }
-            _output.WriteLine("L" + (saveCount + 3).ToString() + ":");
 
+            _output.WriteLine("L" + saveCount.ToString() + ":"); 
             OutAWhileStatment(node);
         }
 
-       
-
-        /*
-        public override void InAIfStatement(AIfStatement node)
-        {
-            //setting label to of statement
-            _output.WriteLine("L" + labelCount.ToString() +":");
-            labelCount++;
-        }
-        public override void OutAIfStatement(AIfStatement node)
-        {
-           //setting label of else of just rest of function
-            _output.WriteLine("L" + labelCount.ToString() + ":");
-        }
-
-        //less than expression 
+        // less than blt
         public override void OutALtCompareExpr(ALtCompareExpr node)
         {
-            _output.WriteLine("\tblt L" + labelCount.ToString());
+
+            _output.WriteLine("\tblt L" + (labelCount).ToString());
             _output.WriteLine("\tldc.i4 0");
             labelCount++;
-            _output.WriteLine("\tbr L" + labelCount.ToString());
-            _output.WriteLine("L" + (labelCount -1).ToString() + ":");
+            _output.WriteLine("\tbr L" + (labelCount).ToString());
+            _output.WriteLine("L" + (labelCount - 1).ToString() + ":");
             _output.WriteLine("\tldc.i4 1");
-            _output.WriteLine("\tldc.i4 0");
+
+            _output.WriteLine("L" + (labelCount).ToString() + ":");
             labelCount++;
-            _output.WriteLine("\tbeq L" + labelCount.ToString());
         }
 
-        public override void OutAElseStatement(AElseStatement node)
+        //ble less than or equal
+        public override void OutALeCompareExpr(ALeCompareExpr node)
         {
-           
-            _output.WriteLine("L" + labelCount.ToString() + ":");
+            _output.WriteLine("\tble L" + (labelCount).ToString());
+            _output.WriteLine("\tldc.i4 0");
+            labelCount++;
+            _output.WriteLine("\tbr L" + (labelCount).ToString());
+            _output.WriteLine("L" + (labelCount - 1).ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+
+            _output.WriteLine("L" + (labelCount).ToString() + ":");
+            labelCount++;
         }
-        */
+        
+        //equal to
+
+        public override void OutAEqCompareExpr(AEqCompareExpr node)
+        {
+            _output.WriteLine("\tbeq L" + (labelCount).ToString());
+            _output.WriteLine("\tldc.i4 0");
+            labelCount++;
+            _output.WriteLine("\tbr L" + (labelCount).ToString());
+            _output.WriteLine("L" + (labelCount - 1).ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+
+            _output.WriteLine("L" + (labelCount).ToString() + ":");
+            labelCount++;
+        }
+
+        //grater than 
+        public override void OutAGtCompareExpr(AGtCompareExpr node)
+        {
+            _output.WriteLine("\tbgt L" + (labelCount).ToString());
+            _output.WriteLine("\tldc.i4 0");
+            labelCount++;
+            _output.WriteLine("\tbr L" + (labelCount).ToString());
+            _output.WriteLine("L" + (labelCount - 1).ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+
+            _output.WriteLine("L" + (labelCount).ToString() + ":");
+            labelCount++;
+        }
+
+        //grater rthan or equal rto 
+        public override void OutAGeCompareExpr(AGeCompareExpr node)
+        {
+            _output.WriteLine("\tbge L" + (labelCount).ToString());
+            _output.WriteLine("\tldc.i4 0");
+            labelCount++;
+            _output.WriteLine("\tbr L" + (labelCount).ToString());
+            _output.WriteLine("L" + (labelCount - 1).ToString() + ":");
+            _output.WriteLine("\tldc.i4 1");
+
+            _output.WriteLine("L" + (labelCount).ToString() + ":");
+            labelCount++;
+        }
 
 
     }
