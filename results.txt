@@ -4,134 +4,159 @@ Running Correct Test Cases
 Testing correct code formation and generation 
  
 
-Quote: Calling function 1`
+Microsoft (R) .NET Framework IL Assembler.  Version 4.8.3752.0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+Assembling 'test.il'  to EXE --> 'test.exe'
+Source file is ANSI
 
-Quote: Printing a string variable, should be 'In function1'`
+Assembled global method function1
+Assembled global method function2
+Assembled method OuterClass::main
+Creating PE file
+
+Emitting classes:
+Class 1:	OuterClass
+
+Emitting fields and methods:
+Global 	Methods: 2;	
+Class 1	Methods: 1;	
+Resolving local member refs: 3 -> 3 defs, 0 refs, 0 unresolved
+
+Emitting events and properties:
+Global 	
+Class 1	
+Resolving local member refs: 0 -> 0 defs, 0 refs, 0 unresolved
+Writing PE file
+Operation completed successfully
+
+Calling function 1
+
+Printing a string variable, should be 'In function1'
 Quote: In function1`
-Quote: Printing a float, should be 2.8`
+Printing a float, should be 2.8
 2.8
-Quote: Calling function 2 and then function 1`
+Calling function 2 and then function 1
 
 
 
-Quote: in function2`
+in function2
 
-Quote: Testing math operations, should be 48`
+Testing math operations, should be 48
 48
 
 
-Quote: Printing a string variable, should be 'In function1'`
+Printing a string variable, should be 'In function1'
 Quote: In function1`
-Quote: --------------------------------------`
-Quote: Testing general if's alongside equality operations`
+--------------------------------------
+Testing general if's alongside equality operations
 
-Quote: Testing equality operator, 3 == 3, should print a statement saying so`
-Quote: Made it into equality test 3 == 3`
-
-
-Quote: Testing > operator, 4 > 3, should print a statement saying so`
-Quote: Made it into 4 > 3 test`
+Testing equality operator, 3 == 3, should print a statement saying so
+Made it into equality test 3 == 3
 
 
-Quote: Testing >= operator, 3 >= 3 and 4 >= 3, should print a statement saying so`
-Quote: Made it into 4 >= 3 test`
-Quote: Made it into 3 >= 3 test`
+Testing > operator, 4 > 3, should print a statement saying so
+Made it into 4 > 3 test
 
 
-Quote: Testing < operator, 2 < 3, should print a statement saying so`
-Quote: Made it into 2 < 3 test`
+Testing >= operator, 3 >= 3 and 4 >= 3, should print a statement saying so
+Made it into 4 >= 3 test
+Made it into 3 >= 3 test
 
 
-Quote: Testing <= operator, 3 <= 3 and 2 <= 3, should print a statement saying so`
-Quote: Made it into 3 <= 3 test`
-Quote: Made it into 2 <= 3 test`
+Testing < operator, 2 < 3, should print a statement saying so
+Made it into 2 < 3 test
 
 
-Quote: Testing != operator, 4 != 3, should print a statement saying so`
-Quote: Made it into 4 != 3 test`
-Quote: ----------------------------------------------------`
-Quote: Testing If-Else statements`
-
-Quote: testing an if-else inside an if statement`
-Quote: 1 == 1, inside first if`
-Quote: 1 != 2, this is the else statement to if 1 == 2, I should be here`
+Testing <= operator, 3 <= 3 and 2 <= 3, should print a statement saying so
+Made it into 3 <= 3 test
+Made it into 2 <= 3 test
 
 
-Quote: Testing General If-Else, should go to else`
-Quote: Correctly entered the else statement for 69 > 420`
+Testing != operator, 4 != 3, should print a statement saying so
+Made it into 4 != 3 test
+----------------------------------------------------
+Testing If-Else statements
+
+testing an if-else inside an if statement
+1 == 1, inside first if
+1 != 2, this is the else statement to if 1 == 2, I should be here
 
 
-Quote: Testing if{if{..}} else, should go in both ifs`
-Quote: Made it in the first if.`
-Quote: Made it in the second if.`
-Quote: ----------------------------------------------------`
-Quote: Testing while loops`
-Quote: Testing while loop for x = 0 to x < 3`
-Quote: x is `0
-Quote: x is `1
-Quote: x is `2
-Quote: Exited while loop.`
-
-Quote: Testing if-else inside a while loop.`
-Quote: Entering while loop - x <= 2`
-Quote: x is `0
-Quote: Entered else statement - x <= 1`
-Quote: x is `1
-Quote: Entered else statement - x <= 1`
-Quote: x is `2
-Quote: Entered if statement if x > 1`
-Quote: Exited while loop.`
-
-Quote: Testing while loops inside an if statement.`
-Quote: Entering if statement - if y (0) < x (5).`
-Quote: Entered if statement, entering while statement to increment y up to x.`
-Quote: y is currently `0
-Quote: y is currently `1
-Quote: y is currently `2
-Quote: y is currently `3
-Quote: y is currently `4
-Quote: Exited while loop, checking y value - `5
-Quote: Checking x value - `5
-Quote: exited if statement.`
-Quote: ----------------------------------------------------`
-Quote: Testing ands, ors, and nots`
-
-Quote: Testing true and - if 5 == 5 and 1 < 2. `
-Quote: properly entered if statement. `
-
-Quote: Testing false left side and - if 5 == 4 and 1 < 2. `
-Quote: Correctly entered else statement.`
-
-Quote: Testing false right side and - if 5 == 5 and 7 < 2. `
-Quote: Correctly entered else statement.`
-
-Quote: Testing false both sides and - if 7 == 5 and 7 < 2. `
-Quote: Correctly entered else statement.`
-
-Quote: Testing true not and - if not(6 == 5) and 1 < 2. `
-Quote: properly entered if statement. `
-
-Quote: Testing false not and - if not(5 == 5) and 1 < 2. `
-Quote: correctly entered else statement.`
+Testing General If-Else, should go to else
+Correctly entered the else statement for 69 > 420
 
 
-Quote: Testing true or - if 5 == 5 or 1 < 2. `
-Quote: properly entered if statement. `
+Testing if{if{..}} else, should go in both ifs
+Made it in the first if.
+Made it in the second if.
+----------------------------------------------------
+Testing while loops
+Testing while loop for x = 0 to x < 3
+x is 0
+x is 1
+x is 2
+Exited while loop.
 
-Quote: Testing true or - if 6 == 5 or 1 < 2. `
-Quote: properly entered if statement. `
+Testing if-else inside a while loop.
+Entering while loop - x <= 2
+x is 0
+Entered else statement - x <= 1
+x is 1
+Entered else statement - x <= 1
+x is 2
+Entered if statement if x > 1
+Exited while loop.
 
-Quote: Testing true or - if 5 == 5 or 6 < 2. `
-Quote: properly entered if statement. `
+Testing while loops inside an if statement.
+Entering if statement - if y (0) < x (5).
+Entered if statement, entering while statement to increment y up to x.
+y is currently 0
+y is currently 1
+y is currently 2
+y is currently 3
+y is currently 4
+Exited while loop, checking y value - 5
+Checking x value - 5
+exited if statement.
+----------------------------------------------------
+Testing ands, ors, and nots
 
-Quote: Testing false or - if 7 == 5 or 7 < 2. `
-Quote: correctly entered else statement.`
+Testing true and - if 5 == 5 and 1 < 2. 
+properly entered if statement. 
 
-Quote: Testing true not or - if not(7 == 5 or 7 < 2). `
-Quote: properly entered if statement. `
+Testing false left side and - if 5 == 4 and 1 < 2. 
+Correctly entered else statement.
 
-Quote: Testing false not or - if not(5 == 5) or 7 < 2. `
-Quote: improperly entered if statement. `
+Testing false right side and - if 5 == 5 and 7 < 2. 
+Correctly entered else statement.
+
+Testing false both sides and - if 7 == 5 and 7 < 2. 
+Correctly entered else statement.
+
+Testing true not and - if not(6 == 5) and 1 < 2. 
+properly entered if statement. 
+
+Testing false not and - if not(5 == 5) and 1 < 2. 
+correctly entered else statement.
+
+
+Testing true or - if 5 == 5 or 1 < 2. 
+properly entered if statement. 
+
+Testing true or - if 6 == 5 or 1 < 2. 
+properly entered if statement. 
+
+Testing true or - if 5 == 5 or 6 < 2. 
+properly entered if statement. 
+
+Testing false or - if 7 == 5 or 7 < 2. 
+correctly entered else statement.
+
+Testing true not or - if not(7 == 5 or 7 < 2). 
+properly entered if statement. 
+
+Testing false not or - if not(5 == 5) or 7 < 2. 
+improperly entered if statement. 
 
 ----------------------------------- 
 Documentation statement is in 'Documentation.txt' in the main file. 

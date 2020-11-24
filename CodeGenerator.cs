@@ -155,7 +155,33 @@ namespace CS426.analysis
         //adding literal for string param
         public override void OutAStringArgs(AStringArgs node)
         {
-           _output.WriteLine("\tldstr " + "\"" +  node.GetString().Text + "\"" );
+            string text = node.GetString().Text;
+
+            string parsed = "";
+
+            bool ridOfQuote = false;
+
+            foreach(char c in text)
+            {
+                if (c.Equals(' ') && !ridOfQuote)
+                {
+                    ridOfQuote = true;
+                }
+                else if (!ridOfQuote)
+                {
+                    //do nothing
+                }
+                else if (c.Equals('`'))
+                {
+                    //we finished the quoted
+                }
+                else if (ridOfQuote)
+                {
+                    parsed += c;
+                }
+            }
+
+            _output.WriteLine("\tldstr " + "\"" +  parsed + "\"" );
         }
 
 
@@ -174,9 +200,7 @@ namespace CS426.analysis
                 _output.WriteLine("\tcall void [mscorlib]System.Console::Write(float32)");
             }
             else if (node.GetId().Text.Equals("Print"))
-            {
-                
-                
+            { 
                 _output.WriteLine("\tcall void [mscorlib]System.Console::Write(string)");
             }
             

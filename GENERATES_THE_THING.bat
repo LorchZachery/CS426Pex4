@@ -17,7 +17,7 @@ echo. >> results.txt
 
 
 ilasm.exe test.il >> results.txt
-
+pause
 test.exe >> results.txt
 
 echo ----------------------------------- >> results.txt
