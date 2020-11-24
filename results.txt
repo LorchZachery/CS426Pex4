@@ -32,7 +32,7 @@ Operation completed successfully
 Calling function 1
 
 Printing a string variable, should be 'In function1'
-Quote: In function1`
+In function1
 Printing a float, should be 2.8
 2.8
 Calling function 2 and then function 1
@@ -46,7 +46,7 @@ Testing math operations, should be 48
 
 
 Printing a string variable, should be 'In function1'
-Quote: In function1`
+In function1
 --------------------------------------
 Testing general if's alongside equality operations
 
@@ -156,7 +156,7 @@ Testing true not or - if not(7 == 5 or 7 < 2).
 properly entered if statement. 
 
 Testing false not or - if not(5 == 5) or 7 < 2. 
-improperly entered if statement. 
+correctly entered else statement.
 
 ----------------------------------- 
 Documentation statement is in 'Documentation.txt' in the main file. 

@@ -113,7 +113,33 @@ namespace CS426.analysis
         //x equals Quote: hello` end
         public override void OutAStrAssignmentCode(AStrAssignmentCode node)
         {
-            _output.WriteLine("\tldstr " + "\"" + node.GetString().Text + "\"");
+
+            string text = node.GetString().Text;
+
+            string parsed = "";
+
+            bool ridOfQuote = false;
+
+            foreach (char c in text)
+            {
+                if (c.Equals(' ') && !ridOfQuote)
+                {
+                    ridOfQuote = true;
+                }
+                else if (!ridOfQuote)
+                {
+                    //do nothing
+                }
+                else if (c.Equals('`'))
+                {
+                    //we finished the quoted
+                }
+                else if (ridOfQuote)
+                {
+                    parsed += c;
+                }
+            }
+            _output.WriteLine("\tldstr " + "\"" + parsed + "\"");
             _output.WriteLine("\tstloc " + node.GetId().Text);
         }
         
