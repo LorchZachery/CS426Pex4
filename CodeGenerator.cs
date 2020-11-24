@@ -136,6 +136,8 @@ namespace CS426.analysis
         public override void OutANotUnaryExpr(ANotUnaryExpr node)
         {
             _output.WriteLine("\tnot");
+            _output.WriteLine("\tldc.i4 2");
+            _output.WriteLine("\tadd");
         }
 
 
