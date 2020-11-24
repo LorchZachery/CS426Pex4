@@ -1,0 +1,4 @@
+Documentation: Used the Introduction to IL Assembly Language and List of CIL instructions webpages for assistance in constructing our code generator. 
+
+Intro Page: https://www.codeproject.com/Articles/3778/Introduction-to-IL-Assembly-Language#Method
+CIL Instructions: https://en.wikipedia.org/wiki/List_of_CIL_instructions

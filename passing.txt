@@ -1,0 +1,104 @@
+COMMENT: Nothing should fail in here
+COMMENT: constants test
+
+
+COMMENT: sub functions test, includes declaration, assignment, addition, if, while, subtraction, strings, comparisons, and
+
+
+function3(){
+	int great end
+	great equals 2 end
+	string test end
+	test equals Quote: test` end
+}
+
+goodEmpty(){
+	int temp1 end
+}
+
+COMMENT: main test, contains declarations, assignments, function calls, if, else, comparisons, while, or, not, parenthesis, addition, subtraction, multiplication, division
+main(){
+
+	string workplz end
+	workplz equals Quote: hopefully` end
+
+	int z end
+	int x end
+	int y end
+	int paren end
+	
+	string goodString end
+	goodString equals Quote: good` end
+	COMMENT: bool goodBool end
+	
+	float floatyboi end
+	
+	z equals 2 end
+	x equals z end
+	y equals 0 end
+	paren equals 2 end
+	
+	COMMENT: goodBool equals not(1 less than 2) end
+	
+	floatyboi equals 6.9 end
+	
+	
+	goodEmpty() end
+	
+
+	if(z same as 2){
+		z equals z plus 1 end
+	}	
+	else{
+		z equals z minus 2 end
+	}
+
+	while(z same as x or not (z greater than x)){
+		if(z same as x){
+			z equals x plus 1 end
+		}
+		else{
+			x equals z times 2 end
+		}
+
+		y equals 7 plus 3 times 2 minus 10 divide 5 end
+
+		paren equals (y plus 4) divide (2 times (4 minus 3)) end
+	}
+	
+	if (1 less than 2){
+		z equals z plus 1 end
+	}
+	
+	if (3 greater than 0){
+		if (2 same as 2){
+			string happy end
+		}
+	}
+	
+	while (1 greater or equal to 1){
+		if (2 less or equal to 7){
+			string sad end
+		}
+	}
+	
+	goodEmpty() end
+
+	int math end
+	
+	math equals 1 plus z end
+	math equals 1 minus z end
+	math equals 1 divide z end
+	math equals 1 times z end
+	math equals 1 plus -z end
+	
+	float mathF end
+	
+	mathF equals 1.0 plus floatyboi end
+	mathF equals 1.0 minus floatyboi end
+	mathF equals 1.0 divide floatyboi end
+	mathF equals 1.0 times floatyboi end
+	mathF equals -1.0 minus floatyboi end
+
+
+}

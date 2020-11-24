@@ -1,217 +1,424 @@
 ﻿
 
 function1(){
-	PrintInt(1) end
+	string func1 end
+	func1 equals Quote: In function1` end
+	NewLine() end
+	Print(Quote: Printing a string variable, should be 'In function1'`) end
+	NewLine() end
+	Print(func1) end
 	NewLine() end
 }
 
 function2(){
-	PrintInt(3) end
+	NewLine() end
+	NewLine() end
+	NewLine() end
+	Print(Quote: in function2`) end
+	NewLine() end
+	int x end
+	x equals 7 end
+	x equals x times 7 plus 2 divide (2 minus 4) end
+	NewLine() end
+	Print(Quote: Testing math operations, should be 48`) end
+	NewLine() end
+	PrintInt(x) end
+	NewLine() end
+	NewLine() end
 }
 
 main() {
-	PrintInt(0) end
+	NewLine() end
+	Print(Quote: Calling function 1`) end
 	NewLine() end
 	function1() end
-	PrintInt(2) end
+	Print(Quote: Printing a float, should be 2.8`) end
+	NewLine() end
+	PrintFloat(2.8) end
+	NewLine() end
+	Print(Quote: Calling function 2 and then function 1`) end
+	NewLine() end
 	function2() end
 	function1() end
 	
-	COMMENT: if( 3 same as 3){
-	COMMENT: 	PrintInt(5) end
-	COMMENT: 	
-	COMMENT: }
-	COMMENT: 
-	COMMENT: if( 4 greater than 3){
-	COMMENT: 	PrintInt(5) end
-	COMMENT: 	
-	COMMENT: }
-	COMMENT: 
-	COMMENT: 
-	COMMENT: if( 3 greater or equal to 3){
-	COMMENT: 	PrintInt(5) end
-	COMMENT: 	
-	COMMENT: }
+	Print(Quote: --------------------------------------`) end
+	NewLine() end
+	Print(Quote: Testing general if's alongside equality operations`) end
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing equality operator, 3 == 3, should print a statement saying so`) end
+	NewLine() end
+	if(3 same as 3){
+		Print(Quote: Made it into equality test 3 == 3`) end
+		NewLine() end
+		
+	}
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing > operator, 4 > 3, should print a statement saying so`) end
+	NewLine() end
+	if( 4 greater than 3){
+		Print(Quote: Made it into 4 > 3 test`) end
+		NewLine() end
+	}
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing >= operator, 3 >= 3 and 4 >= 3, should print a statement saying so`) end
+	NewLine() end
+	if( 4 greater or equal to 3){
+		Print(Quote: Made it into 4 >= 3 test`) end
+		NewLine() end
+	}
+	if( 3 greater or equal to 3){
+		Print(Quote: Made it into 3 >= 3 test`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	NewLine() end
+	Print(Quote: Testing < operator, 2 < 3, should print a statement saying so`) end
+	NewLine() end
+	if( 2 less than 3){
+		Print(Quote: Made it into 2 < 3 test`) end
+		NewLine() end
+	}
+	NewLine() end
+	NewLine() end
+	Print(Quote: Testing <= operator, 3 <= 3 and 2 <= 3, should print a statement saying so`) end
+	NewLine() end
+	if( 3 less or equal to 3){
+		Print(Quote: Made it into 3 <= 3 test`) end
+		NewLine() end
+	}
+	if( 2 less or equal to 3){
+		Print(Quote: Made it into 2 <= 3 test`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing != operator, 4 != 3, should print a statement saying so`) end
+	NewLine() end
+	if( not(4 same as 3)){
+		Print(Quote: Made it into 4 != 3 test`) end
+		NewLine() end
+	}
+	
+	Print(Quote: ----------------------------------------------------`) end
+	
+	NewLine() end
+	
+	Print(Quote: Testing If-Else statements`) end
+	
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: testing an if-else inside an if statement`) end
+	NewLine() end
+	if(1 same as 1){
+		Print(Quote: 1 == 1, inside first if`) end
+		NewLine() end
+		if( 1 same as 2){
+			Print(Quote: 1 == 2, uh oh I shouldn't be here.`) end
+			NewLine() end
+		}
+		else{
+			Print(Quote: 1 != 2, this is the else statement to if 1 == 2, I should be here`) end
+			NewLine() end
+		}
+	}
+	
+	NewLine() end
+	NewLine() end
+	Print(Quote: Testing General If-Else, should go to else`) end
+	NewLine() end
+	
+	if(69 greater than 420){
+		Print(Quote: Shouldn't be here, because 69 !> 420`) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: Correctly entered the else statement for 69 > 420`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing if{if{..}} else, should go in both ifs`) end
+	NewLine() end
+	
+	if(666 same as 666){
+		Print(Quote: Made it in the first if.`) end
+		NewLine() end
+		if(555 same as 555){
+			Print(Quote: Made it in the second if.`) end
+			NewLine() end
+		}
+	} 
+	else {
+		Print(Quote: Did not make it in either if, uh oh.`) end
+		NewLine() end
+	
+	}
+	Print(Quote: ----------------------------------------------------`) end
+	
+	NewLine() end
+	
+	Print(Quote: Testing while loops`) end
+	NewLine() end
+	
+	Print(Quote: Testing while loop for x = 0 to x < 3`) end
+	NewLine() end
+	
+	int x end
+	
+	x equals 0 end
+	
+	while(x less than 3){
+		Print(Quote: x is `) end
+		PrintInt(x) end
+		NewLine() end
+		x equals x plus 1 end
+	}
+	Print(Quote: Exited while loop.`) end
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing if-else inside a while loop.`) end
+	NewLine() end
+	
+	x equals 0 end
+	
+	Print(Quote: Entering while loop - x <= 2`) end
+	NewLine() end
+	
+	while(x less or equal to 2){
+		Print(Quote: x is `) end
+		PrintInt(x) end
+		NewLine() end
+		if (x greater than 1){
+			Print(Quote: Entered if statement if x > 1`) end
+			NewLine() end
+		} else{
+			Print(Quote: Entered else statement - x <= 1`) end
+			NewLine() end
+		}
+		x equals x plus 1 end
+	
+	}
+	
+	Print(Quote: Exited while loop.`) end
+	
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing while loops inside an if statement.`) end
+	NewLine() end
+	
+	x equals 5 end
+	int y end
+	y equals 0 end
+	
+	Print(Quote: Entering if statement - if y (0) < x (5).`) end
+	NewLine() end
+	
+	if(y less than x){
+		Print(Quote: Entered if statement, entering while statement to increment y up to x.`) end
+		NewLine() end
+		while(y less than x){
+			Print(Quote: y is currently `) end
+			PrintInt(y) end
+			NewLine() end
+			y equals y plus 1 end
+		}
+		Print(Quote: Exited while loop, checking y value - `) end
+		PrintInt(y) end
+		NewLine() end
+		Print(Quote: Checking x value - `) end
+		PrintInt(x) end
+		NewLine() end
+	}
+	
+	Print(Quote: exited if statement.`) end
+	NewLine() end
 	
 	
-	COMMENT: if( 3 less or equal to 3){
-	COMMENT: 	PrintInt(5) end
-	COMMENT: 	
-	COMMENT: }
+	Print(Quote: ----------------------------------------------------`) end
+	
+	NewLine() end
+	
+	Print(Quote: Testing ands, ors, and nots`) end
+	
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing true and - if 5 == 5 and 1 < 2. `) end
+	NewLine() end
+	if(5 same as 5 and 1 less than 2){
+		Print(Quote: properly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: Incorrectly entered else statement.`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	Print(Quote: Testing false left side and - if 5 == 4 and 1 < 2. `) end
+	NewLine() end
+	if(5 same as 4 and 1 less than 2){
+		Print(Quote: improperly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: Correctly entered else statement.`) end
+		NewLine() end
+	}
+	NewLine() end
+	Print(Quote: Testing false right side and - if 5 == 5 and 7 < 2. `) end
+	NewLine() end
+	if(5 same as 5 and 7 less than 2){
+		Print(Quote: improperly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: Correctly entered else statement.`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	
+	Print(Quote: Testing false both sides and - if 7 == 5 and 7 < 2. `) end
+	NewLine() end
+	if(7 same as 5 and 7 less than 2){
+		Print(Quote: improperly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: Correctly entered else statement.`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	Print(Quote: Testing true not and - if not(6 == 5) and 1 < 2. `) end
+	NewLine() end
+	if(not(6 same as 5) and 1 less than 2){
+		Print(Quote: properly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: Incorrectly entered else statement.`) end
+		NewLine() end
+	}
+	
+	
+	NewLine() end
+	Print(Quote: Testing false not and - if not(5 == 5) and 1 < 2. `) end
+	NewLine() end
+	if(not(5 same as 5) and 1 less than 2){
+		Print(Quote: improperly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: correctly entered else statement.`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	NewLine() end
+	
+	Print(Quote: Testing true or - if 5 == 5 or 1 < 2. `) end
+	NewLine() end
+	if(5 same as 5 or 1 less than 2){
+		Print(Quote: properly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: incorrectly entered else statement.`) end
+		NewLine() end
+	}
+	
+	NewLine() end
+	
+	Print(Quote: Testing true or - if 6 == 5 or 1 < 2. `) end
+	NewLine() end
+	if(6 same as 5 or 1 less than 2){
+		Print(Quote: properly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: incorrectly entered else statement.`) end
+		NewLine() end
+	}
+	
+	
+	NewLine() end
+	
+	Print(Quote: Testing true or - if 5 == 5 or 6 < 2. `) end
+	NewLine() end
+	if(5 same as 5 or 6 less than 2){
+		Print(Quote: properly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: incorrectly entered else statement.`) end
+		NewLine() end
+	}
 	
 	
 	
+	NewLine() end
 	
-    COMMENT: int x end
-	COMMENT: x equals 0 end
-	COMMENT: 
-	COMMENT: int z end 
-	COMMENT: z equals 0 end
-	COMMENT: 
-	COMMENT: int y end
-	COMMENT: y equals 0 end
-	COMMENT: 
-	COMMENT: while( (y less than 2) and (x less than 3)){
-	COMMENT: 	PrintInt(1) end
-	COMMENT: 	x equals x plus 1 end
-	COMMENT: 	y equals y plus 1 end
-	COMMENT: 	while(z less than 3){
-	COMMENT: 		PrintInt(2) end
-	COMMENT: 		z equals z plus 1 end
-	COMMENT: 	}
-	COMMENT: 	z equals 0 end
-	COMMENT: }
+	Print(Quote: Testing false or - if 7 == 5 or 7 < 2. `) end
+	NewLine() end
+	if(7 same as 5 or 7 less than 2){
+		Print(Quote: improperly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: correctly entered else statement.`) end
+		NewLine() end
+	}
 	
 	
-	
-	  COMMENT: if( not (3 less than 10) and( 3 less than 10)){
-	  COMMENT: 	PrintInt(1) end
-	  COMMENT: 	if(3 less than 10){
-	  COMMENT: 	PrintInt(2) end
-	  COMMENT: }
-	  COMMENT: }else{
-	  COMMENT: 	PrintInt(3) end
-	  COMMENT: }
+	NewLine() end
 	
 	
+	Print(Quote: Testing true not or - if not(7 == 5 or 7 < 2). `) end
+	NewLine() end
+	if(not(7 same as 5 or 7 less than 2)){
+		Print(Quote: properly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: incorrectly entered else statement.`) end
+		NewLine() end
+	}
 	
 	
+	NewLine() end
 	
 	
-	COMMENT: if( (3 less than 10) and (3 less than 10) and (3 less than 10)){
-	COMMENT: PrintInt(4) end
-	COMMENT: if( (3 less than 10)){
-	COMMENT: 	PrintInt(5) end
-	COMMENT: }
-	COMMENT: else{
-	COMMENT: 	PrintInt(2) end
-	COMMENT: }
-	COMMENT: }
-	COMMENT:  else{
-	COMMENT: 	PrintInt(3) end
-	COMMENT: }
+	Print(Quote: Testing false not or - if not(5 == 5) or 7 < 2. `) end
+	NewLine() end
+	if(not(6 greater than 5 or 1 less than 2)){
+		Print(Quote: improperly entered if statement. `) end
+		NewLine() end
+	}
+	else{
+		Print(Quote: correctly entered else statement.`) end
+		NewLine() end
+	}
 	
 	
+	NewLine() end
 	
 	
-	
-	
-	
-	
-	
-	
-	COMMENT: int x end
-	COMMENT: x equals 0 end
-	COMMENT: 
-	COMMENT: int z end
-	COMMENT: z equals 0 end
-	COMMENT: 
-	COMMENT: int test end
-	COMMENT: test equals 0 end
-	COMMENT: 
-	COMMENT: 
-	COMMENT: while( (x less than 3) and (test less than 2)){
-	COMMENT: 	Print(Quote: jon`) end
-	COMMENT: 	NewLine() end
-	COMMENT: 	x equals x plus 1 end
-	COMMENT: 	test equals test plus 1 end
-	COMMENT: 	while( z less than 2){
-	COMMENT: 		Print(Quote: in z`) end
-	COMMENT: 		NewLine() end
-	COMMENT: 		z equals z plus 1 end
-	COMMENT: 		if(z less than 2){ 
-	COMMENT: 			Print(Quote: in if inside`) end
-	COMMENT: 			NewLine() end
-	COMMENT: 			if(5 less than 10){
-	COMMENT: 				Print(Quote: super deep`) end
-	COMMENT: 				NewLine() end
-	COMMENT: 			}
-	COMMENT: 		}
-	COMMENT: 		else{
-	COMMENT: 			Print(Quote: in else inside`) end
-	COMMENT: 			NewLine() end
-	COMMENT: 		}
-	COMMENT: 	}
-	COMMENT: 	z equals 0 end
-	COMMENT: }
-	COMMENT: Print(Quote: out`) end
-	
-	
-	
-	COMMENT: if( 5 less than 10){ 
-	COMMENT: 	Print(Quote: in if outside`) end 
-	COMMENT: 	if( 10 less than 10){ 
-	COMMENT: 	Print(Quote: in if inside`) end 
-	COMMENT: 	}
-	COMMENT: 	else{
-	COMMENT: 		Print(Quote: HELL`) end
-	COMMENT: 	}
-	COMMENT: 	if(22 less than 20){
-	COMMENT: 		Print(Quote: f this`) end
-	COMMENT: 	}
-	COMMENT: }
-	COMMENT: else{
-	COMMENT: 	Print(Quote: in else`) end
-	COMMENT: }
-	COMMENT: 
-	COMMENT: 
-	COMMENT: Print(Quote: made it out`) end
-	
-	
-	
-	
-	COMMENT: int z end
-	COMMENT: z equals 3 end
-	COMMENT: float x end
-	COMMENT: x equals 5.6e2 end
-	COMMENT: float y end
-	COMMENT: y equals x end
-	
-	COMMENT: int w end
-	COMMENT: w equals 5 times 4 minus 1 end
-	COMMENT: PrintInt(w) end
-	COMMENT: NewLine() end
-	COMMENT: 
-	COMMENT: w equals 5 times (4  minus 1) divide 3 end
-	COMMENT: PrintInt(w) end
-	
-	
-	
-	COMMENT: z equals -3 end
-	COMMENT: PrintInt(z) end
-	COMMENT: NewLine() end
-	COMMENT: 
-	COMMENT: int negAdd end
-	COMMENT: negAdd equals z plus 3 end
-	COMMENT: PrintInt(negAdd) end
-	
-	
-	COMMENT: int addtion end
-	COMMENT: addtion equals 3 plus z end
-	COMMENT: PrintInt(addtion) end
-	COMMENT: NewLine() end
-	COMMENT: 
-	COMMENT: int subtraction end
-	COMMENT: subtraction equals 4 minus z end
-	COMMENT: PrintInt(subtraction) end
-	COMMENT: NewLine() end
-	COMMENT: 
-	COMMENT: int multiplicaiton end
-	COMMENT: multiplicaiton equals 4 times z end
-	COMMENT: PrintInt(multiplicaiton) end
-	COMMENT: NewLine() end
-	COMMENT: 
-	COMMENT: int dividsion end
-	COMMENT: dividsion equals 9 divide z end 
-	COMMENT: PrintInt(dividsion) end
-	COMMENT: NewLine() end
-	
-	COMMENT: string tee end
-	COMMENT: tee equals Quote: fartehr` end
-	COMMENT: PrintInt(9) end
-	COMMENT: NewLine() end
-	COMMENT: PrintFloat(3.4) end
-	COMMENT: NewLine() end
-	COMMENT: Print(Quote: helloworld`) end
+ 
 	
 }
